@@ -3,368 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blake Corbit - Technical Manager & Engineer</title>
-    <meta name="description" content="Technical Support Manager who builds automation, leads teams, and solves complex problems">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            line-height: 1.6;
-            color: #2d3748;
-            background: #f7fafc;
-        }
-        
-        /* Navigation */
-        nav {
-            background: #1a202c;
-            padding: 1rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        
-        nav .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        nav .logo {
-            color: #f7fafc;
-            font-size: 1.5rem;
-            font-weight: 700;
-            text-decoration: none;
-        }
-        
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-        
-        nav a {
-            color: #f7fafc;
-            text-decoration: none;
-            transition: color 0.3s;
-            font-weight: 500;
-        }
-        
-        nav a:hover {
-            color: #f6ad55;
-        }
-        
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
-            color: #f7fafc;
-            padding: 8rem 2rem 6rem;
-            text-align: center;
-        }
-        
-        .hero h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-            font-weight: 800;
-        }
-        
-        .hero .subtitle {
-            font-size: 1.5rem;
-            margin-bottom: 2rem;
-            opacity: 0.9;
-            font-weight: 400;
-        }
-        
-        .hero .intro {
-            max-width: 800px;
-            margin: 0 auto 3rem;
-            font-size: 1.2rem;
-            line-height: 1.8;
-            opacity: 0.95;
-        }
-        
-        .cta-buttons {
-            display: flex;
-            gap: 1.5rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        
-        .btn {
-            display: inline-block;
-            padding: 1rem 2.5rem;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s;
-            font-size: 1.1rem;
-        }
-        
-        .btn-primary {
-            background: #f6ad55;
-            color: #1a202c;
-        }
-        
-        .btn-primary:hover {
-            background: #ed8936;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(246, 173, 85, 0.4);
-        }
-        
-        .btn-secondary {
-            background: transparent;
-            color: #f7fafc;
-            border: 2px solid #f7fafc;
-        }
-        
-        .btn-secondary:hover {
-            background: #f7fafc;
-            color: #1a202c;
-        }
-        
-        /* Cards Section */
-        .cards-section {
-            max-width: 1200px;
-            margin: -3rem auto 4rem;
-            padding: 0 2rem;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-        
-        .card {
-            background: white;
-            border-radius: 12px;
-            padding: 2.5rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            transition: all 0.3s;
-            border-left: 4px solid #f6ad55;
-        }
-        
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 24px rgba(0,0,0,0.15);
-        }
-        
-        .card h3 {
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
-            color: #1a202c;
-        }
-        
-        .card p {
-            color: #4a5568;
-            margin-bottom: 1.5rem;
-            line-height: 1.7;
-        }
-        
-        .card a {
-            color: #f6ad55;
-            text-decoration: none;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .card a:hover {
-            color: #ed8936;
-        }
-        
-        /* Stats Section */
-        .stats {
-            background: #1a202c;
-            color: #f7fafc;
-            padding: 4rem 2rem;
-            margin: 4rem 0;
-        }
-        
-        .stats .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 3rem;
-            text-align: center;
-        }
-        
-        .stat-item h4 {
-            font-size: 3rem;
-            color: #f6ad55;
-            margin-bottom: 0.5rem;
-            font-weight: 800;
-        }
-        
-        .stat-item p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-        
-        /* Contact Section */
-        .contact {
-            max-width: 800px;
-            margin: 4rem auto;
-            padding: 3rem 2rem;
-            text-align: center;
-        }
-        
-        .contact h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            color: #1a202c;
-        }
-        
-        .contact p {
-            font-size: 1.2rem;
-            color: #4a5568;
-            margin-bottom: 2rem;
-        }
-        
-        .contact-info {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            flex-wrap: wrap;
-            margin-top: 2rem;
-        }
-        
-        .contact-info a {
-            color: #f6ad55;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1.1rem;
-            transition: color 0.3s;
-        }
-        
-        .contact-info a:hover {
-            color: #ed8936;
-        }
-        
-        /* Footer */
-        footer {
-            background: #1a202c;
-            color: #f7fafc;
-            text-align: center;
-            padding: 2rem;
-            margin-top: 4rem;
-        }
-        
-        footer p {
-            opacity: 0.8;
-        }
-        
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-            
-            .hero .subtitle {
-                font-size: 1.2rem;
-            }
-            
-            nav ul {
-                gap: 1rem;
-                font-size: 0.9rem;
-            }
-            
-            .cta-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .btn {
-                width: 100%;
-                max-width: 300px;
-            }
-        }
-    </style>
+    <title>Blake Corbit</title>
+    <meta name="description" content="Technical manager, automation engineer, school bus resident.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <nav>
-        <div class="container">
-            <a href="index.html" class="logo">Blake Corbit</a>
+        <div class="nav-inner">
+            <a href="index.html" class="name">blake corbit</a>
             <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="resume.html">Resume</a></li>
-                <li><a href="projects.html">Projects</a></li>
-                <li><a href="about.html">About</a></li>
+                <li><a href="resume.html">resume</a></li>
+                <li><a href="projects.html">projects</a></li>
+                <li><a href="about.html">about</a></li>
             </ul>
         </div>
     </nav>
 
-    <section class="hero">
-        <h1>Blake Corbit</h1>
-        <div class="subtitle">Technical Manager Who Actually Codes</div>
-        <div class="intro">
-            I started answering support tickets. Three and a half years later, I'm managing teams while writing the Python automation that makes us 40% more efficient. I build tools, lead people, and solve problems that don't have Stack Overflow answers.
-        </div>
-        <div class="cta-buttons">
-            <a href="resume.html" class="btn btn-primary">View Resume</a>
-            <a href="mailto:Blake.A.Corbit@gmail.com" class="btn btn-secondary">Get in Touch</a>
+    <section class="home-hero">
+        <div class="page-width">
+            <div class="role">technical manager / automation engineer / milford, nh</div>
+            <h1>Blake Corbit</h1>
+            <div class="intro">
+                I drove a trash truck during COVID. Taught myself Python on the side. Got hired into tech support, automated half the job, got promoted three times in three and a half years. Now I manage the team and still write the code. I live in a school bus and I'm not kidding.
+            </div>
+            <a href="mailto:Blake.A.Corbit@gmail.com" class="email">blake.a.corbit@gmail.com</a>
         </div>
     </section>
 
-    <section class="cards-section">
-        <div class="card">
-            <h3>Resume</h3>
-            <p>Technical Support Manager with 3.5 years of progressive advancement. Python/PowerShell automation, SQL Server administration, team leadership, and distributed systems troubleshooting.</p>
-            <a href="resume.html">View full resume →</a>
-        </div>
+    <div class="bus-photo">
+        <img src="img/bus.jpg" alt="Converted school bus — home and office, Milford, New Hampshire" width="1200" height="400" style="object-fit: cover;">
+        <div class="caption">home office. milford, nh.</div>
+    </div>
 
-        <div class="card">
-            <h3>Technical Projects</h3>
-            <p>Automation scripts, diagnostic tools, and systems engineering work. Real solutions to real problems—from Zendesk API integration to PowerShell diagnostic toolsets.</p>
-            <a href="projects.html">See what I've built →</a>
-        </div>
+    <section class="home-content">
+        <div class="page-width">
+            <div class="section-heading">what i do</div>
 
-        <div class="card">
-            <h3>About Me</h3>
-            <p>Eagle Scout. Appalachian Trail thru-hiker. Technical problem solver who believes leadership is earned through capability, not title.</p>
-            <a href="about.html">Read my story →</a>
-        </div>
-    </section>
+            <p>I run technical support operations at AutoVitals, a SaaS platform for automotive shops. My team handles 163+ tickets a week across 200+ client installations. When I started, the work was mostly manual. I wrote the Python and PowerShell automation that cut our workload by 40%.</p>
 
-    <section class="stats">
-        <div class="container">
-            <div class="stat-item">
-                <h4>3x</h4>
-                <p>Promoted in 3.5 years</p>
-            </div>
-            <div class="stat-item">
-                <h4>40%</h4>
-                <p>Team efficiency gain through automation</p>
-            </div>
-            <div class="stat-item">
-                <h4>200+</h4>
-                <p>Clients supported</p>
-            </div>
-            <div class="stat-item">
-                <h4>50+</h4>
-                <p>Technical articles authored</p>
-            </div>
-        </div>
-    </section>
+            <p>I troubleshoot distributed systems for a living — SQL Server connectivity, API synchronization failures, Windows services that crash at 2am. I've done crash dump analysis in WinDbg, mapped network infrastructure for clients who didn't know their own topology, and migrated an entire customer base from one API version to another with zero downtime.</p>
 
-    <section class="contact">
-        <h2>Let's Talk</h2>
-        <p>Looking for Technical Support Manager, Engineering Manager, or Senior Solutions Engineer roles where technical depth and leadership intersect.</p>
-        <div class="contact-info">
-            <a href="mailto:Blake.A.Corbit@gmail.com">Blake.A.Corbit@gmail.com</a>
-            <a href="tel:6037323032">(603) 732-3032</a>
-            <a href="https://linkedin.com/in/blake-corbit" target="_blank">LinkedIn</a>
+            <p>Before tech, I thru-hiked the Appalachian Trail. 2,192 miles in 100 days. It taught me that most hard problems are just a lot of small problems in a row.</p>
         </div>
     </section>
 
     <footer>
-        <p>&copy; 2025 Blake Corbit | Milford, NH</p>
+        <div class="footer-inner">
+            <span class="left">blake corbit — 2026</span>
+            <div class="right">
+                <a href="mailto:Blake.A.Corbit@gmail.com">email</a>
+                <a href="https://linkedin.com/in/blake-corbit" target="_blank">linkedin</a>
+            </div>
+        </div>
     </footer>
 </body>
 </html>
