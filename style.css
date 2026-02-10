@@ -394,6 +394,14 @@ hr.dark {
     margin-bottom: 1.5rem;
 }
 
+.resume-summary {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: #2d3748;
+    margin-bottom: 0;
+}
+
 .resume-company {
     font-weight: 700;
     font-size: 1.1rem;

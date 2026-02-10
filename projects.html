@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Projects — Blake Corbit</title>
-    <meta name="description" content="Automation, diagnostic tools, and systems work.">
+    <meta name="description" content="SaaS products, automation suites, and diagnostic tooling.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%230a0a0a'/><text x='50' y='68' font-family='monospace' font-size='60' font-weight='bold' fill='%237a8c5e' text-anchor='middle'>bc</text></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -25,7 +26,7 @@
     <section class="projects-header">
         <div class="page-width--wide">
             <h1>projects</h1>
-            <p>tools i built because the problem annoyed me enough.</p>
+            <p>things i built because they needed to exist.</p>
         </div>
     </section>
 
@@ -33,9 +34,18 @@
         <div class="page-width--wide">
 
             <div class="project-entry">
+                <h3>Content Curator</h3>
+                <div class="stack">react / supabase / stripe / claude api / vercel</div>
+                <p>Full-stack SaaS product for marketing agencies. Agencies create client profiles with brand voice, industry, and website — then generate platform-specific posts for Google Business Profile, Facebook, Instagram, and LinkedIn using Claude. Multi-tenant auth with row-level security, three subscription tiers with Stripe billing, usage tracking with soft caps, and automated website analysis to bootstrap client profiles. This isn't a weekend project — it has real payment infrastructure, real auth, and real deployment.</p>
+                <a href="https://github.com/extramediumai/content-curator" target="_blank" class="source">source: github.com/extramediumai/content-curator</a>
+            </div>
+
+            <hr>
+
+            <div class="project-entry">
                 <h3>Zendesk API Automation Suite</h3>
                 <div class="stack">python / zendesk api / openai api</div>
-                <p>Built a Python automation suite on top of the Zendesk and OpenAI APIs to handle bulk ticket processing, intelligent categorization, and real-time team metrics. Started because a security incident dropped 100+ tickets in our queue simultaneously and doing it manually would have taken the team a week. The suite now handles reporting dashboards, CLI tools for common operations, and GPT-powered ticket categorization. Cut our manual workload by 40%.</p>
+                <p>A security incident dropped 100+ tickets in our queue simultaneously. Doing it manually would have taken the team a week. I built a Python automation suite on top of the Zendesk and OpenAI APIs that handled bulk ticket processing, GPT-powered categorization, and real-time team metrics. It now runs daily — reporting dashboards, CLI tools for common operations, automated triage. Cut our manual workload by 40%.</p>
             </div>
 
             <hr>
@@ -43,7 +53,7 @@
             <div class="project-entry">
                 <h3>PowerShell Diagnostic Toolkit</h3>
                 <div class="stack">powershell / windows server / sql server</div>
-                <p>A set of diagnostic scripts for troubleshooting distributed system issues across 200+ client installations. SQL Server connectivity diagnostics, network path tracing, DNS verification, registry configuration validation, and log aggregation for common failure patterns. Built it because I got tired of running the same fifteen commands in the same order every time someone reported a sync issue. Improved first-contact resolution from 62% to 78%.</p>
+                <p>I got tired of running the same fifteen commands in the same order every time someone reported a sync issue. So I built a diagnostic toolkit: SQL Server connectivity checks, network path tracing, DNS verification, registry validation, and log aggregation across 200+ client installations. The team went from 62% first-contact resolution to 78%. Not because they got smarter — because the tooling got smarter.</p>
             </div>
 
             <hr>
@@ -51,7 +61,7 @@
             <div class="project-entry">
                 <h3>TRACS API Migration System</h3>
                 <div class="stack">python / tracs api / client communication automation</div>
-                <p>NAPA changed their API from v1 to v3 and every affected client needed to migrate without downtime. Built a tracking system for migration status, automated the communication workflows, wrote validation scripts to verify each migration completed correctly, and developed rollback procedures for anything that went wrong. Every client transitioned with zero downtime.</p>
+                <p>NAPA deprecated their v1 API. Every affected client needed to migrate to v3 without losing a minute of uptime. I built the tracking system, automated the communication workflows, wrote validation scripts for each migration, and developed rollback procedures for anything that went sideways. Every client transitioned with zero downtime. The rollback procedures were never used.</p>
             </div>
 
             <hr>
@@ -59,7 +69,7 @@
             <div class="project-entry">
                 <h3>Technical Knowledge Base</h3>
                 <div class="stack">documentation / process engineering</div>
-                <p>50+ technical articles covering SQL Server troubleshooting, API integrations, network connectivity, and distributed systems issues. Not "content" — actual troubleshooting decision trees and step-by-step procedures written so the next person who hits the problem doesn't have to start from zero. Also built the onboarding documentation that cut new engineer ramp-up time by 60%.</p>
+                <p>50+ technical articles. Not marketing content — troubleshooting decision trees and step-by-step procedures for SQL Server, API integrations, network connectivity, and distributed systems. Written so the next person who hits the problem doesn't start from zero. Also built the onboarding documentation that cut new engineer ramp-up time by 60%. Knowledge that compounds is the highest-leverage thing you can build.</p>
             </div>
 
         </div>
@@ -71,6 +81,7 @@
             <div class="right">
                 <a href="mailto:Blake.A.Corbit@gmail.com">email</a>
                 <a href="https://linkedin.com/in/blake-corbit" target="_blank">linkedin</a>
+                <a href="https://github.com/ApollosTable" target="_blank">github</a>
             </div>
         </div>
     </footer>

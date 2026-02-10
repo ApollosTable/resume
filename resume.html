@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resume — Blake Corbit</title>
-    <meta name="description" content="Technical Support Manager — Python, PowerShell, SQL Server, team leadership.">
+    <meta name="description" content="Technical Support Manager and full-stack builder — Python, React, SQL Server, team leadership.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%230a0a0a'/><text x='50' y='68' font-family='monospace' font-size='60' font-weight='bold' fill='%237a8c5e' text-anchor='middle'>bc</text></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -26,9 +27,8 @@
         <div class="page-width--wide">
             <h1>Blake Corbit</h1>
             <div class="contact">
-                milford, nh<br>
-                <a href="tel:6037323032">(603) 732-3032</a> · <a href="mailto:Blake.A.Corbit@gmail.com">blake.a.corbit@gmail.com</a><br>
-                <a href="https://linkedin.com/in/blake-corbit" target="_blank">linkedin.com/in/blake-corbit</a>
+                milford, nh · <a href="tel:6037323032">(603) 732-3032</a> · <a href="mailto:Blake.A.Corbit@gmail.com">blake.a.corbit@gmail.com</a><br>
+                <a href="https://linkedin.com/in/blake-corbit" target="_blank">linkedin.com/in/blake-corbit</a> · <a href="https://github.com/ApollosTable" target="_blank">github.com/ApollosTable</a>
             </div>
         </div>
     </section>
@@ -37,10 +37,14 @@
         <div class="page-width--wide">
 
             <div class="resume-section">
+                <p class="resume-summary">Technical manager and full-stack builder. Three promotions in 3.5 years. I write the automation my team runs on, ship SaaS products independently, and treat every system like code that can be improved.</p>
+            </div>
+
+            <div class="resume-section">
                 <h2>experience</h2>
 
                 <div class="resume-company">AutoVitals, Inc.</div>
-                <div class="resume-tenure">august 2021 — present</div>
+                <div class="resume-tenure">august 2021 — present · SaaS platform serving 200+ automotive client sites</div>
 
                 <div class="resume-roles">
                     <div class="resume-role">
@@ -61,20 +65,31 @@
                     </div>
                 </div>
 
-                <p style="color: var(--gray); margin-bottom: 1.5rem; font-size: 0.95rem;">Three promotions in 3.5 years. SaaS platform serving 200+ automotive client sites.</p>
-
                 <ul>
-                    <li>Built Python automation using Zendesk and OpenAI APIs that reduced team manual workload by 40%</li>
-                    <li>Created PowerShell diagnostic toolsets for distributed system troubleshooting — improved first-contact resolution from 62% to 78%</li>
-                    <li>Administered SQL Server environments for 200+ clients: database troubleshooting, connectivity diagnostics, synchronization, performance tuning</li>
-                    <li>Led NAPA TRACS API v1-to-v3 migration for all affected clients with zero-downtime transitions</li>
-                    <li>Managed integrations between AutoVitals and third-party systems (TRACS, Tekmetric, ShopMonkey, Mitchell, Twilio)</li>
-                    <li>Performed crash dump analysis (WinDbg), network packet capture, and infrastructure mapping</li>
-                    <li>Led incident management for critical security escalations, including automated bulk processing of 100+ related tickets</li>
-                    <li>Maintained 0.12-hour average first-reply time despite 33% team size reduction through automation and process improvements</li>
-                    <li>Reduced critical escalations by 35% through pre-escalation path implementation with Customer Success</li>
-                    <li>Recruited, onboarded, and mentored engineers through training program covering SQL troubleshooting, API diagnostics, client communication</li>
-                    <li>Authored 50+ technical knowledge base articles covering SQL Server, API integrations, network connectivity, distributed systems</li>
+                    <li>Built Python automation using Zendesk and OpenAI APIs — reduced team manual workload by 40% and eliminated repetitive ticket triage</li>
+                    <li>Created PowerShell diagnostic toolsets for distributed system troubleshooting across 200+ client installations — improved first-contact resolution from 62% to 78%</li>
+                    <li>Administered SQL Server environments: database troubleshooting, connectivity diagnostics, synchronization, and performance tuning for 200+ clients</li>
+                    <li>Led NAPA TRACS API v1-to-v3 migration for all affected clients — zero-downtime transitions, built tracking, validation, and rollback tooling</li>
+                    <li>Managed integrations between AutoVitals and third-party platforms (TRACS, Tekmetric, ShopMonkey, Mitchell, Twilio)</li>
+                    <li>Performed crash dump analysis (WinDbg), network packet capture, and infrastructure mapping for complex escalations</li>
+                    <li>Maintained 0.12-hour average first-reply time despite 33% team size reduction — through automation and process redesign, not longer hours</li>
+                    <li>Reduced critical escalations by 35% by implementing pre-escalation path with Customer Success</li>
+                    <li>Recruited, trained, and mentored engineers through program covering SQL troubleshooting, API diagnostics, and client communication</li>
+                    <li>Authored 50+ technical knowledge base articles — SQL Server, API integrations, network connectivity, distributed systems</li>
+                </ul>
+            </div>
+
+            <hr>
+
+            <div class="resume-section">
+                <h2>independent work</h2>
+
+                <div class="resume-company">Content Curator — <a href="https://github.com/extramediumai/content-curator" target="_blank" style="font-weight: 400; font-size: 0.875rem;">github</a></div>
+                <div class="resume-tenure">AI-powered SaaS for marketing agencies</div>
+                <ul>
+                    <li>Built full-stack SaaS application: React + Vite frontend, Supabase auth and database, Stripe subscription billing, Claude API integration</li>
+                    <li>Multi-tenant architecture with row-level security, three subscription tiers, and usage-based rate limiting</li>
+                    <li>Generates platform-specific content for Google Business Profile, Facebook, Instagram, and LinkedIn from client brand profiles</li>
                 </ul>
             </div>
 
@@ -84,10 +99,11 @@
                 <h2>skills</h2>
 
                 <ul class="skills-list">
-                    <li><span class="label">languages:</span> Python, PowerShell, Bash, SQL</li>
-                    <li><span class="label">tools:</span> Zendesk, Salesforce, Git, VS Code, WinDbg, OpenAI API</li>
-                    <li><span class="label">platforms:</span> SQL Server, Windows Server, REST APIs, TRACS API, Tekmetric, ShopMonkey</li>
-                    <li><span class="label">operations:</span> incident management, SLA management, escalation procedures, technical documentation</li>
+                    <li><span class="label">languages:</span> Python, JavaScript, TypeScript, PowerShell, Bash, SQL</li>
+                    <li><span class="label">frontend:</span> React, Vite, Tailwind CSS, HTML/CSS</li>
+                    <li><span class="label">backend &amp; infra:</span> Supabase, SQL Server, Windows Server, REST APIs, Stripe, Vercel</li>
+                    <li><span class="label">tools:</span> Git, VS Code, WinDbg, Zendesk API, OpenAI API, Claude API</li>
+                    <li><span class="label">operations:</span> incident management, SLA management, escalation design, technical documentation</li>
                 </ul>
             </div>
 
@@ -97,15 +113,9 @@
                 <h2>distinction</h2>
 
                 <ul class="resume-simple-list">
-                    <li>
-                        Eagle Scout — Boy Scouts of America
-                    </li>
-                    <li>
-                        Appalachian Trail thru-hike — 2,192 miles in 100 days
-                    </li>
-                    <li>
-                        St. Paul's School Advanced Studies Program — LISP &amp; Artificial Intelligence
-                    </li>
+                    <li>Eagle Scout — Boy Scouts of America</li>
+                    <li>Appalachian Trail thru-hike — 2,192 miles, 100 days</li>
+                    <li>St. Paul's School Advanced Studies Program — LISP &amp; Artificial Intelligence</li>
                 </ul>
             </div>
 
@@ -118,6 +128,7 @@
             <div class="right">
                 <a href="mailto:Blake.A.Corbit@gmail.com">email</a>
                 <a href="https://linkedin.com/in/blake-corbit" target="_blank">linkedin</a>
+                <a href="https://github.com/ApollosTable" target="_blank">github</a>
             </div>
         </div>
     </footer>
