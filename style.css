@@ -589,7 +589,8 @@ footer {
 @media print {
     body {
         background: white;
-        font-size: 11pt;
+        font-size: 9.5pt;
+        line-height: 1.4;
     }
 
     nav, footer {
@@ -598,17 +599,20 @@ footer {
 
     .resume-header {
         background: white;
-        padding: 0 0 1rem;
+        padding: 0 0 0.5rem;
         border-bottom: 2px solid #000;
     }
 
     .resume-header h1 {
         color: #000;
-        font-size: 1.5rem;
+        font-size: 1.3rem;
+        margin-bottom: 0.25rem;
     }
 
     .resume-header .contact {
         color: #333;
+        font-size: 0.7rem;
+        line-height: 1.5;
     }
 
     .resume-header .contact a {
@@ -616,16 +620,77 @@ footer {
     }
 
     .resume-body {
-        padding: 1rem 0;
+        padding: 0.5rem 0;
     }
 
     .resume-section {
-        margin-bottom: 1.5rem;
+        margin-bottom: 0.75rem;
     }
 
     .resume-section h2 {
-        font-size: 1rem;
-        margin-bottom: 0.75rem;
+        font-size: 0.85rem;
+        margin-bottom: 0.4rem;
+        padding-bottom: 0.25rem;
+    }
+
+    .resume-summary {
+        font-size: 0.8rem;
+        line-height: 1.5;
+    }
+
+    .resume-company {
+        font-size: 0.95rem;
+        margin-bottom: 0.1rem;
+    }
+
+    .resume-tenure {
+        font-size: 0.7rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .resume-roles {
+        margin-bottom: 0.5rem;
+    }
+
+    .resume-role {
+        padding: 0.15rem 0;
+    }
+
+    .resume-role .title {
+        font-size: 0.8rem;
+    }
+
+    .resume-role .dates {
+        font-size: 0.65rem;
+    }
+
+    .resume-body ul {
+        margin-left: 1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .resume-body li {
+        margin-bottom: 0.2rem;
+        line-height: 1.4;
+        font-size: 0.85rem;
+    }
+
+    .skills-list li {
+        margin-bottom: 0.15rem;
+        font-size: 0.8rem;
+    }
+
+    .skills-list .label {
+        font-size: 0.7rem;
+    }
+
+    .resume-simple-list li {
+        padding: 0.15rem 0;
+        font-size: 0.85rem;
+    }
+
+    .resume-simple-list .detail {
+        font-size: 0.7rem;
     }
 
     .page-width, .page-width--wide {
@@ -638,7 +703,11 @@ footer {
     }
 
     hr {
-        margin: 1rem 0;
+        margin: 0.5rem 0;
+    }
+
+    p {
+        margin-bottom: 0.5rem;
     }
 }
 
