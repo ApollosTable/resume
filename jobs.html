@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Tracker — Blake Corbit</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%230a0a0a'/><text x='50' y='68' font-family='monospace' font-size='60' font-weight='bold' fill='%237a8c5e' text-anchor='middle'>bc</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Password gate */
+        #gate {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #gate form {
+            text-align: center;
+        }
+        #gate input[type="password"] {
+            font-family: var(--font-mono);
+            font-size: 0.875rem;
+            padding: 0.6rem 1rem;
+            border: 1px solid var(--border);
+            background: var(--dark);
+            color: var(--white);
+            border-radius: 4px;
+            width: 240px;
+            outline: none;
+        }
+        #gate input[type="password"]:focus {
+            border-color: var(--accent);
+        }
+        #gate button {
+            font-family: var(--font-mono);
+            font-size: 0.8125rem;
+            padding: 0.6rem 1.25rem;
+            border: 1px solid var(--accent);
+            background: transparent;
+            color: var(--accent);
+            cursor: pointer;
+            border-radius: 4px;
+            margin-left: 0.5rem;
+        }
+        #gate button:hover {
+            background: var(--accent);
+            color: var(--black);
+        }
+        #gate .error {
+            color: #c53030;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            margin-top: 0.75rem;
+        }
+
+        /* Dashboard */
+        #dashboard { display: none; }
+
+        .dash-header {
+            background: var(--black);
+            padding: 3rem 0 2rem;
+        }
+        .dash-header h1 {
+            color: var(--pure-white);
+            font-size: 1.75rem;
+            margin-bottom: 0.5rem;
+        }
+        .dash-header .meta {
+            color: var(--light-gray);
+        }
+
+        .dash-stats {
+            display: flex;
+            gap: 2rem;
+            padding: 1.5rem 0;
+            flex-wrap: wrap;
+        }
+        .stat {
+            text-align: center;
+        }
+        .stat .num {
+            font-family: var(--font-mono);
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #2d3748;
+        }
+        .stat .label {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .dash-filters {
+            display: flex;
+            gap: 0.75rem;
+            padding: 1rem 0;
+            flex-wrap: wrap;
+        }
+        .filter-btn {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            padding: 0.35rem 0.75rem;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--gray);
+            cursor: pointer;
+            border-radius: 3px;
+        }
+        .filter-btn.active {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        .filter-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .job-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        .job-table th {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--gray);
+            text-align: left;
+            padding: 0.5rem 0.75rem;
+            border-bottom: 1px solid var(--off-white);
+        }
+        .job-table td {
+            font-size: 0.85rem;
+            padding: 0.6rem 0.75rem;
+            border-bottom: 1px solid #f0f0f0;
+            color: #4a5568;
+        }
+        .job-table tr:hover td {
+            background: #fafafa;
+        }
+        .job-table .score {
+            font-family: var(--font-mono);
+            font-weight: 600;
+            color: #2d3748;
+        }
+        .job-table .title-link {
+            color: #2d3748;
+            font-weight: 500;
+            text-decoration: none;
+        }
+        .job-table .title-link:hover {
+            color: var(--accent);
+        }
+        .job-table .source-tag {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            padding: 0.15rem 0.4rem;
+            border-radius: 2px;
+            background: #f0f0f0;
+            color: var(--gray);
+        }
+        .job-table .status-badge {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            padding: 0.15rem 0.4rem;
+            border-radius: 2px;
+        }
+        .status-new { background: #ebf8ff; color: #2b6cb0; }
+        .status-applied { background: #f0fff4; color: #276749; }
+        .status-skipped { background: #f7f7f7; color: #999; }
+
+        .no-jobs {
+            font-family: var(--font-mono);
+            font-size: 0.875rem;
+            color: var(--gray);
+            padding: 3rem 0;
+            text-align: center;
+        }
+
+        .dash-content {
+            padding: 1rem 0 4rem;
+        }
+
+        @media (max-width: 768px) {
+            .job-table { font-size: 0.8rem; }
+            .job-table th:nth-child(4),
+            .job-table td:nth-child(4),
+            .job-table th:nth-child(5),
+            .job-table td:nth-child(5) { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-inner">
+            <a href="index.html" class="name">blake corbit</a>
+            <ul>
+                <li><a href="resume.html">resume</a></li>
+                <li><a href="projects.html">projects</a></li>
+                <li><a href="about.html">about</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Password Gate -->
+    <div id="gate">
+        <form onsubmit="return unlock()">
+            <div style="font-family: var(--font-mono); font-size: 0.8125rem; color: var(--gray); margin-bottom: 1rem;">enter password</div>
+            <div>
+                <input type="password" id="pw" autocomplete="off" autofocus>
+                <button type="submit">go</button>
+            </div>
+            <div id="pw-error" class="error" style="display:none">wrong password</div>
+        </form>
+    </div>
+
+    <!-- Dashboard (hidden until authenticated) -->
+    <div id="dashboard">
+        <section class="dash-header">
+            <div class="page-width--wide">
+                <h1>job tracker</h1>
+                <div class="meta" id="last-updated"></div>
+            </div>
+        </section>
+
+        <section class="dash-content">
+            <div class="page-width--wide">
+                <div class="dash-stats" id="stats"></div>
+
+                <div class="dash-filters">
+                    <button class="filter-btn active" data-filter="new" onclick="setFilter('new')">new</button>
+                    <button class="filter-btn" data-filter="applied" onclick="setFilter('applied')">applied</button>
+                    <button class="filter-btn" data-filter="skipped" onclick="setFilter('skipped')">skipped</button>
+                    <button class="filter-btn" data-filter="all" onclick="setFilter('all')">all</button>
+                </div>
+
+                <table class="job-table">
+                    <thead>
+                        <tr>
+                            <th>score</th>
+                            <th>title</th>
+                            <th>company</th>
+                            <th>salary</th>
+                            <th>source</th>
+                            <th>status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="job-list"></tbody>
+                </table>
+
+                <div id="no-jobs" class="no-jobs" style="display:none">
+                    no jobs found. run <code>node hunt.js search</code> locally to find more.
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <div class="footer-inner">
+            <span class="left">blake corbit — 2026</span>
+            <div class="right">
+                <a href="mailto:Blake.A.Corbit@gmail.com">email</a>
+                <a href="https://linkedin.com/in/blake-corbit" target="_blank">linkedin</a>
+                <a href="https://github.com/ApollosTable" target="_blank">github</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+    // Simple password hash check (SHA-256)
+    // Not truly secure — just keeps casual visitors out
+    const HASH = '32b92e917c14e39292c72bbc4251e4937b4c249a9e18aaea6d48c9fda02706ca';
+    let jobs = [];
+    let currentFilter = 'new';
+
+    async function sha256(str) {
+        const buf = await crypto.subtle.digest('SHA-256',
+            new TextEncoder().encode(str));
+        return Array.from(new Uint8Array(buf))
+            .map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    async function unlock() {
+        const pw = document.getElementById('pw').value;
+        const hash = await sha256(pw);
+        if (hash === HASH) {
+            localStorage.setItem('jt_auth', hash);
+            showDashboard();
+        } else {
+            document.getElementById('pw-error').style.display = 'block';
+        }
+        return false;
+    }
+
+    async function checkAuth() {
+        const stored = localStorage.getItem('jt_auth');
+        if (stored === HASH) {
+            showDashboard();
+        }
+    }
+
+    async function showDashboard() {
+        document.getElementById('gate').style.display = 'none';
+        document.getElementById('dashboard').style.display = 'block';
+        await loadJobs();
+    }
+
+    async function loadJobs() {
+        try {
+            const res = await fetch('data/jobs.json');
+            jobs = await res.json();
+            jobs.sort((a, b) => b.score - a.score);
+            renderStats();
+            renderJobs();
+        } catch {
+            document.getElementById('no-jobs').style.display = 'block';
+        }
+    }
+
+    function renderStats() {
+        const stats = { total: jobs.length, new: 0, applied: 0, skipped: 0 };
+        const sources = {};
+        jobs.forEach(j => {
+            stats[j.status] = (stats[j.status] || 0) + 1;
+            sources[j.source] = (sources[j.source] || 0) + 1;
+        });
+
+        const dates = jobs.map(j => j.foundDate).filter(Boolean).sort();
+        const latest = dates[dates.length - 1] || 'never';
+        document.getElementById('last-updated').textContent = `last search: ${latest}`;
+
+        document.getElementById('stats').innerHTML = `
+            <div class="stat"><div class="num">${stats.total}</div><div class="label">total</div></div>
+            <div class="stat"><div class="num">${stats.new}</div><div class="label">new</div></div>
+            <div class="stat"><div class="num">${stats.applied}</div><div class="label">applied</div></div>
+            <div class="stat"><div class="num">${stats.skipped}</div><div class="label">skipped</div></div>
+            ${Object.entries(sources).map(([s, c]) =>
+                `<div class="stat"><div class="num">${c}</div><div class="label">${s}</div></div>`
+            ).join('')}
+        `;
+    }
+
+    function setFilter(filter) {
+        currentFilter = filter;
+        document.querySelectorAll('.filter-btn').forEach(b => {
+            b.classList.toggle('active', b.dataset.filter === filter);
+        });
+        renderJobs();
+    }
+
+    function renderJobs() {
+        const filtered = currentFilter === 'all'
+            ? jobs
+            : jobs.filter(j => j.status === currentFilter);
+
+        const tbody = document.getElementById('job-list');
+
+        if (filtered.length === 0) {
+            tbody.innerHTML = '';
+            document.getElementById('no-jobs').style.display = 'block';
+            return;
+        }
+
+        document.getElementById('no-jobs').style.display = 'none';
+        tbody.innerHTML = filtered.map(j => `
+            <tr>
+                <td class="score">${j.score}</td>
+                <td>${j.url
+                    ? `<a href="${j.url}" target="_blank" class="title-link">${esc(j.title)}</a>`
+                    : esc(j.title)}</td>
+                <td>${esc(j.company)}</td>
+                <td>${esc(j.salary || '—')}</td>
+                <td><span class="source-tag">${j.source}</span></td>
+                <td><span class="status-badge status-${j.status}">${j.status}</span></td>
+            </tr>
+        `).join('');
+    }
+
+    function esc(str) {
+        const d = document.createElement('div');
+        d.textContent = str;
+        return d.innerHTML;
+    }
+
+    checkAuth();
+    </script>
+</body>
+</html>
