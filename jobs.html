@@ -176,6 +176,111 @@
         .status-applied { background: #f0fff4; color: #276749; }
         .status-skipped { background: #f7f7f7; color: #999; }
 
+        /* Follow-up alerts */
+        .followup-banner {
+            background: #fffbeb;
+            border: 1px solid #f6e05e;
+            border-radius: 4px;
+            padding: 1rem 1.25rem;
+            margin: 1rem 0;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+        }
+        .followup-banner .banner-title {
+            font-weight: 600;
+            color: #975a16;
+            margin-bottom: 0.5rem;
+        }
+        .followup-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.3rem 0;
+            color: #744210;
+        }
+        .followup-item .days {
+            font-weight: 600;
+            color: #c53030;
+        }
+        .followup-item .days.urgent { color: #c53030; }
+        .followup-item .days.soon { color: #975a16; }
+
+        /* Match rate bar */
+        .match-bar {
+            display: inline-block;
+            width: 48px;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            overflow: hidden;
+            vertical-align: middle;
+            margin-right: 4px;
+        }
+        .match-bar-fill {
+            height: 100%;
+            border-radius: 3px;
+        }
+        .match-high { background: #48bb78; }
+        .match-mid { background: #ecc94b; }
+        .match-low { background: #fc8181; }
+        .match-text {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--gray);
+        }
+
+        /* Expandable row */
+        .job-detail-row td {
+            padding: 0.75rem 1rem;
+            background: #fafbfc;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .job-detail-inner {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            font-size: 0.8rem;
+        }
+        .detail-col { flex: 1; min-width: 200px; }
+        .detail-col h4 {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--gray);
+            margin-bottom: 0.4rem;
+        }
+        .skill-tag {
+            display: inline-block;
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            padding: 0.1rem 0.35rem;
+            border-radius: 2px;
+            margin: 0.1rem;
+        }
+        .skill-have { background: #c6f6d5; color: #276749; }
+        .skill-miss { background: #fed7d7; color: #9b2c2c; }
+
+        /* Apply button */
+        .apply-btn {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            padding: 0.2rem 0.5rem;
+            border: 1px solid var(--accent);
+            background: transparent;
+            color: var(--accent);
+            cursor: pointer;
+            border-radius: 2px;
+            text-decoration: none;
+        }
+        .apply-btn:hover {
+            background: var(--accent);
+            color: var(--black);
+        }
+
+        .job-table tr.expandable { cursor: pointer; }
+        .job-table tr.expandable:hover td { background: #f7fafc; }
+
         .no-jobs {
             font-family: var(--font-mono);
             font-size: 0.875rem;
@@ -193,7 +298,9 @@
             .job-table th:nth-child(4),
             .job-table td:nth-child(4),
             .job-table th:nth-child(5),
-            .job-table td:nth-child(5) { display: none; }
+            .job-table td:nth-child(5),
+            .job-table th:nth-child(6),
+            .job-table td:nth-child(6) { display: none; }
         }
     </style>
 </head>
@@ -234,9 +341,12 @@
             <div class="page-width--wide">
                 <div class="dash-stats" id="stats"></div>
 
+                <div id="followup-banner" class="followup-banner" style="display:none"></div>
+
                 <div class="dash-filters">
                     <button class="filter-btn active" data-filter="new" onclick="setFilter('new')">new</button>
                     <button class="filter-btn" data-filter="applied" onclick="setFilter('applied')">applied</button>
+                    <button class="filter-btn" data-filter="followup" onclick="setFilter('followup')">follow up</button>
                     <button class="filter-btn" data-filter="skipped" onclick="setFilter('skipped')">skipped</button>
                     <button class="filter-btn" data-filter="all" onclick="setFilter('all')">all</button>
                 </div>
@@ -247,9 +357,11 @@
                             <th>score</th>
                             <th>title</th>
                             <th>company</th>
+                            <th>match</th>
                             <th>salary</th>
                             <th>source</th>
                             <th>status</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody id="job-list"></tbody>
@@ -324,12 +436,19 @@
         }
     }
 
+    function daysSince(dateStr) {
+        if (!dateStr) return 0;
+        return Math.floor((Date.now() - new Date(dateStr).getTime()) / (1000 * 60 * 60 * 24));
+    }
+
     function renderStats() {
         const stats = { total: jobs.length, new: 0, applied: 0, skipped: 0 };
         const sources = {};
+        let needFollowup = 0;
         jobs.forEach(j => {
             stats[j.status] = (stats[j.status] || 0) + 1;
             sources[j.source] = (sources[j.source] || 0) + 1;
+            if (j.status === 'applied' && j.appliedDate && daysSince(j.appliedDate) >= 5) needFollowup++;
         });
 
         const dates = jobs.map(j => j.foundDate).filter(Boolean).sort();
@@ -341,10 +460,34 @@
             <div class="stat"><div class="num">${stats.new}</div><div class="label">new</div></div>
             <div class="stat"><div class="num">${stats.applied}</div><div class="label">applied</div></div>
             <div class="stat"><div class="num">${stats.skipped}</div><div class="label">skipped</div></div>
+            ${needFollowup > 0 ? `<div class="stat"><div class="num" style="color:#c53030">${needFollowup}</div><div class="label">follow up</div></div>` : ''}
             ${Object.entries(sources).map(([s, c]) =>
                 `<div class="stat"><div class="num">${c}</div><div class="label">${s}</div></div>`
             ).join('')}
         `;
+
+        // Follow-up banner
+        const banner = document.getElementById('followup-banner');
+        const followups = jobs
+            .filter(j => j.status === 'applied' && j.appliedDate && daysSince(j.appliedDate) >= 5)
+            .sort((a, b) => daysSince(b.appliedDate) - daysSince(a.appliedDate));
+
+        if (followups.length > 0) {
+            banner.style.display = 'block';
+            banner.innerHTML = `
+                <div class="banner-title">follow up needed (${followups.length})</div>
+                ${followups.map(j => {
+                    const d = daysSince(j.appliedDate);
+                    const cls = d >= 14 ? 'urgent' : 'soon';
+                    return `<div class="followup-item">
+                        <span>${esc(j.title)} @ ${esc(j.company)}</span>
+                        <span class="days ${cls}">${d}d ago</span>
+                    </div>`;
+                }).join('')}
+            `;
+        } else {
+            banner.style.display = 'none';
+        }
     }
 
     function setFilter(filter) {
@@ -355,10 +498,41 @@
         renderJobs();
     }
 
+    function matchBar(gaps) {
+        if (!gaps || !gaps.matchRate && gaps.matchRate !== 0) return '<span class="match-text">—</span>';
+        const rate = gaps.matchRate;
+        const cls = rate >= 70 ? 'match-high' : rate >= 40 ? 'match-mid' : 'match-low';
+        return `<span class="match-bar"><span class="match-bar-fill ${cls}" style="width:${rate}%"></span></span><span class="match-text">${rate}%</span>`;
+    }
+
+    function renderGapDetail(gaps) {
+        if (!gaps || !gaps.jobWants || gaps.jobWants.length === 0) {
+            return '<em style="color:var(--gray);font-size:0.75rem">no skill data available</em>';
+        }
+        const matched = (gaps.matched || []).map(s => `<span class="skill-tag skill-have">${esc(s)}</span>`).join('');
+        const missing = (gaps.missing || []).map(s => `<span class="skill-tag skill-miss">${esc(s)}</span>`).join('');
+        return `<div class="job-detail-inner">
+            ${matched ? `<div class="detail-col"><h4>skills you have</h4>${matched}</div>` : ''}
+            ${missing ? `<div class="detail-col"><h4>gaps to address</h4>${missing}</div>` : ''}
+        </div>`;
+    }
+
+    function toggleDetail(id) {
+        const row = document.getElementById('detail-' + id);
+        if (row) {
+            row.style.display = row.style.display === 'none' ? 'table-row' : 'none';
+        }
+    }
+
     function renderJobs() {
-        const filtered = currentFilter === 'all'
-            ? jobs
-            : jobs.filter(j => j.status === currentFilter);
+        let filtered;
+        if (currentFilter === 'all') {
+            filtered = jobs;
+        } else if (currentFilter === 'followup') {
+            filtered = jobs.filter(j => j.status === 'applied' && j.appliedDate && daysSince(j.appliedDate) >= 5);
+        } else {
+            filtered = jobs.filter(j => j.status === currentFilter);
+        }
 
         const tbody = document.getElementById('job-list');
 
@@ -369,18 +543,27 @@
         }
 
         document.getElementById('no-jobs').style.display = 'none';
-        tbody.innerHTML = filtered.map(j => `
-            <tr>
+        tbody.innerHTML = filtered.map((j, i) => {
+            const rowId = `row-${i}`;
+            const followupInfo = j.status === 'applied' && j.appliedDate
+                ? ` (${daysSince(j.appliedDate)}d)` : '';
+            return `
+            <tr class="expandable" onclick="toggleDetail('${rowId}')">
                 <td class="score">${j.score}</td>
                 <td>${j.url
-                    ? `<a href="${j.url}" target="_blank" class="title-link">${esc(j.title)}</a>`
+                    ? `<a href="${j.url}" target="_blank" class="title-link" onclick="event.stopPropagation()">${esc(j.title)}</a>`
                     : esc(j.title)}</td>
                 <td>${esc(j.company)}</td>
+                <td>${matchBar(j.gaps)}</td>
                 <td>${esc(j.salary || '—')}</td>
                 <td><span class="source-tag">${j.source}</span></td>
-                <td><span class="status-badge status-${j.status}">${j.status}</span></td>
+                <td><span class="status-badge status-${j.status}">${j.status}${followupInfo}</span></td>
+                <td>${j.url ? `<a href="${j.url}" target="_blank" class="apply-btn" onclick="event.stopPropagation()">apply</a>` : ''}</td>
             </tr>
-        `).join('');
+            <tr class="job-detail-row" id="detail-${rowId}" style="display:none">
+                <td colspan="8">${renderGapDetail(j.gaps)}</td>
+            </tr>`;
+        }).join('');
     }
 
     function esc(str) {
