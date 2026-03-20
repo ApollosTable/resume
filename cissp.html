@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CISSP GRIND — cloudnomad.us</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #050510;
+  --surface: rgba(10,15,30,0.85);
+  --surface2: rgba(15,25,50,0.7);
+  --cyan: #00d4ff;
+  --cyan-dim: #0099bb;
+  --cyan-glow: rgba(0,212,255,0.25);
+  --orange: #ff6a00;
+  --orange-glow: rgba(255,106,0,0.25);
+  --white: #e0f0ff;
+  --white2: #8899bb;
+  --white3: #445577;
+  --red: #ff2244;
+  --green: #00ff88;
+  --border: rgba(0,212,255,0.12);
+  --border-bright: rgba(0,212,255,0.35);
+  --glow: 0 0 15px var(--cyan-glow), 0 0 30px rgba(0,212,255,0.08);
+  --font-display: 'Orbitron', sans-serif;
+  --font-body: 'Rajdhani', sans-serif;
+  --font-mono: 'Share Tech Mono', monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--white);font-family:var(--font-body);font-weight:400;min-height:100vh;overflow-x:hidden;}
+::selection{background:var(--cyan);color:var(--bg);}
+
+/* === CANVAS BG === */
+#tron-bg{position:fixed;inset:0;z-index:0;pointer-events:none;}
+
+/* === TOPBAR === */
+.topbar{
+  position:sticky;top:0;z-index:100;
+  background:var(--surface);
+  backdrop-filter:blur(30px);
+  border-bottom:1px solid var(--border);
+  padding:10px 24px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.logo{
+  font-family:var(--font-display);font-size:0.85rem;font-weight:700;
+  letter-spacing:3px;text-transform:uppercase;
+  color:var(--cyan);
+  text-shadow:0 0 10px var(--cyan-glow),0 0 30px rgba(0,212,255,0.15);
+}
+.logo span{color:var(--white3);font-weight:400;letter-spacing:1px;font-size:0.65rem;}
+.stats{display:flex;gap:18px;align-items:center;}
+.stat{display:flex;align-items:center;gap:5px;font-family:var(--font-mono);font-size:0.75rem;color:var(--white3);}
+.stat-v{color:var(--cyan);font-weight:700;}
+.stat-orange{color:var(--orange);}
+.lvl{
+  font-family:var(--font-display);font-size:0.6rem;font-weight:700;
+  letter-spacing:2px;padding:3px 10px;
+  border:1px solid var(--cyan);color:var(--cyan);
+  text-shadow:0 0 8px var(--cyan-glow);
+  box-shadow:0 0 8px rgba(0,212,255,0.15);
+}
+.xp-outer{width:70px;height:3px;background:rgba(0,212,255,0.1);overflow:hidden;}
+.xp-inner{height:100%;background:var(--cyan);box-shadow:0 0 6px var(--cyan);transition:width 0.6s ease;}
+
+/* === NAV === */
+.nav{
+  background:var(--surface);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  display:flex;overflow-x:auto;padding:0 24px;
+}
+.nav button{
+  background:none;border:none;
+  font-family:var(--font-display);font-size:0.6rem;font-weight:600;
+  letter-spacing:2px;text-transform:uppercase;
+  color:var(--white3);padding:12px 18px;
+  cursor:pointer;border-bottom:2px solid transparent;
+  transition:all 0.3s;white-space:nowrap;
+}
+.nav button:hover{color:var(--white2);}
+.nav button.active{
+  color:var(--cyan);border-bottom-color:var(--cyan);
+  text-shadow:0 0 10px var(--cyan-glow);
+}
+
+/* === MAIN === */
+.main{max-width:1050px;margin:0 auto;padding:24px;position:relative;z-index:1;}
+
+/* === CARD === */
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:2px;padding:24px;margin-bottom:14px;
+  backdrop-filter:blur(15px);
+  position:relative;overflow:hidden;
+}
+.card::before{
+  content:'';position:absolute;top:0;left:0;width:100%;height:1px;
+  background:linear-gradient(90deg,transparent,var(--cyan),transparent);
+  opacity:0.4;
+}
+.card::after{
+  content:'';position:absolute;top:0;left:0;width:1px;height:100%;
+  background:linear-gradient(180deg,var(--cyan),transparent);
+  opacity:0.2;
+}
+.card h2{font-family:var(--font-display);font-size:0.85rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--cyan);margin-bottom:12px;text-shadow:0 0 8px var(--cyan-glow);}
+.card h3{font-family:var(--font-display);font-size:0.65rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--white2);margin-bottom:8px;}
+
+/* === DOMAIN GRID === */
+.dgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;}
+.dcard{
+  background:var(--surface);border:1px solid var(--border);
+  padding:18px;cursor:pointer;transition:all 0.3s;
+  position:relative;overflow:hidden;
+}
+.dcard::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(0,212,255,0.03),transparent);
+  transition:all 0.3s;
+}
+.dcard:hover{border-color:var(--cyan);box-shadow:var(--glow);}
+.dcard:hover::before{background:linear-gradient(135deg,rgba(0,212,255,0.08),transparent);}
+.dcard:hover .dnum{color:var(--cyan);opacity:0.15;}
+.dnum{
+  font-family:var(--font-display);font-size:2.5rem;font-weight:900;
+  color:var(--white3);opacity:0.06;
+  position:absolute;top:6px;right:14px;
+}
+.dcard h3{font-family:var(--font-body);font-size:0.95rem;font-weight:600;color:var(--white);letter-spacing:0;text-transform:none;margin-bottom:4px;}
+.dcard p{font-size:0.78rem;color:var(--white3);line-height:1.4;margin-bottom:8px;}
+.dweight{font-family:var(--font-display);font-size:0.55rem;letter-spacing:2px;color:var(--orange);text-shadow:0 0 6px var(--orange-glow);}
+.pbar{width:100%;height:2px;background:rgba(0,212,255,0.08);margin-top:10px;overflow:hidden;}
+.pfill{height:100%;background:var(--cyan);box-shadow:0 0 4px var(--cyan);transition:width 0.6s;}
+.dmeta{font-family:var(--font-mono);font-size:0.6rem;color:var(--white3);margin-top:5px;}
+
+/* === STUDY === */
+.study-content{line-height:1.7;font-size:0.92rem;}
+.study-content h4{
+  font-family:var(--font-display);font-size:0.65rem;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;
+  color:var(--cyan);margin:22px 0 10px;
+  text-shadow:0 0 8px var(--cyan-glow);
+  padding-bottom:4px;
+  border-bottom:1px solid var(--border);
+}
+.study-content ul{margin-left:16px;margin-bottom:10px;}
+.study-content li{margin-bottom:5px;font-size:0.85rem;color:var(--white2);}
+.key-term{
+  display:inline;
+  background:rgba(0,212,255,0.08);border:1px solid rgba(0,212,255,0.2);
+  padding:1px 8px;font-family:var(--font-mono);font-size:0.78rem;
+  color:var(--cyan);
+}
+.exam-tip{
+  background:rgba(255,106,0,0.06);border-left:2px solid var(--orange);
+  padding:10px 14px;margin:14px 0;font-size:0.8rem;color:var(--white2);
+  font-family:var(--font-body);
+}
+
+/* === QUIZ === */
+.qheader{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:14px;font-family:var(--font-mono);font-size:0.75rem;}
+.qprog{color:var(--white3);}
+.qtext{font-size:1rem;margin-bottom:16px;line-height:1.6;font-weight:500;}
+.qopts{display:flex;flex-direction:column;gap:8px;}
+.qopt{
+  background:rgba(0,212,255,0.03);border:1px solid var(--border);
+  padding:12px 16px;cursor:pointer;transition:all 0.25s;
+  font-size:0.9rem;text-align:left;color:var(--white);
+  font-family:var(--font-body);
+}
+.qopt:hover:not(.dis){border-color:var(--cyan);box-shadow:inset 0 0 20px rgba(0,212,255,0.05);}
+.qopt.correct{border-color:var(--green);background:rgba(0,255,136,0.06);box-shadow:0 0 10px rgba(0,255,136,0.1);}
+.qopt.wrong{border-color:var(--red);background:rgba(255,34,68,0.06);box-shadow:0 0 10px rgba(255,34,68,0.1);}
+.qopt.dis{cursor:default;opacity:0.5;}
+.qopt.dis.correct{opacity:1;}
+.explanation{background:var(--surface2);padding:14px;margin-top:14px;font-size:0.85rem;line-height:1.6;color:var(--white2);border-left:2px solid var(--cyan);}
+
+/* === BUTTONS === */
+.btn{
+  font-family:var(--font-display);font-size:0.6rem;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;
+  padding:10px 22px;cursor:pointer;
+  border:1px solid var(--cyan);
+  background:rgba(0,212,255,0.06);color:var(--cyan);
+  transition:all 0.3s;
+  text-shadow:0 0 6px var(--cyan-glow);
+}
+.btn:hover{background:var(--cyan);color:var(--bg);box-shadow:0 0 25px var(--cyan-glow),0 0 50px rgba(0,212,255,0.1);}
+.btn-dim{border-color:var(--border);color:var(--white3);background:none;text-shadow:none;}
+.btn-dim:hover{border-color:var(--white3);color:var(--white);background:rgba(255,255,255,0.03);box-shadow:none;}
+.btn-orange{border-color:var(--orange);color:var(--orange);background:rgba(255,106,0,0.06);text-shadow:0 0 6px var(--orange-glow);}
+.btn-orange:hover{background:var(--orange);color:var(--bg);box-shadow:0 0 25px var(--orange-glow);}
+.btns{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;}
+
+/* === FLASHCARD === */
+.fc-wrap{perspective:1000px;margin:20px auto;max-width:520px;}
+.fc{width:100%;min-height:200px;cursor:pointer;position:relative;transform-style:preserve-3d;transition:transform 0.5s ease;}
+.fc.flip{transform:rotateY(180deg);}
+.fc-face{
+  position:absolute;inset:0;backface-visibility:hidden;
+  background:var(--surface);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  padding:28px;text-align:center;
+  font-family:var(--font-display);font-size:0.9rem;font-weight:600;
+  letter-spacing:1px;color:var(--cyan);
+  text-shadow:0 0 10px var(--cyan-glow);
+}
+.fc-face::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);opacity:0.3;}
+.fc-back{
+  transform:rotateY(180deg);
+  font-family:var(--font-body);font-size:0.85rem;font-weight:400;
+  letter-spacing:0;color:var(--white2);text-shadow:none;
+  line-height:1.6;
+}
+.fc-count{text-align:center;margin:10px 0;font-family:var(--font-mono);font-size:0.7rem;color:var(--white3);}
+.fc-btns{display:flex;justify-content:center;gap:10px;margin-top:14px;}
+
+/* === EXAM === */
+.timer{font-family:var(--font-display);font-size:1.2rem;font-weight:800;letter-spacing:3px;color:var(--orange);text-shadow:0 0 15px var(--orange-glow);}
+.results{text-align:center;}
+.big-score{
+  font-family:var(--font-display);font-size:5rem;font-weight:900;
+  letter-spacing:4px;
+  color:var(--cyan);
+  text-shadow:0 0 40px var(--cyan-glow),0 0 80px rgba(0,212,255,0.15);
+}
+.pass-label{font-family:var(--font-display);font-size:0.8rem;font-weight:700;letter-spacing:4px;text-transform:uppercase;}
+.pass-yes{color:var(--green);text-shadow:0 0 10px rgba(0,255,136,0.4);}
+.pass-no{color:var(--red);text-shadow:0 0 10px rgba(255,34,68,0.4);}
+
+/* === RESOURCES === */
+.rlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:10px;}
+.ritem{background:var(--surface2);padding:14px;border:1px solid var(--border);transition:all 0.3s;}
+.ritem:hover{border-color:var(--cyan);}
+.ritem h4{font-family:var(--font-body);font-size:0.88rem;font-weight:600;margin-bottom:3px;}
+.ritem p{font-size:0.75rem;color:var(--white3);line-height:1.4;}
+.rtag{
+  display:inline-block;font-family:var(--font-display);
+  font-size:0.5rem;letter-spacing:1px;padding:2px 8px;
+  border:1px solid var(--border);color:var(--white3);
+  margin-top:6px;text-transform:uppercase;
+}
+
+/* === DASHBOARD === */
+.dgrid2{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:20px;}
+.dstat{
+  background:var(--surface);border:1px solid var(--border);
+  padding:16px;text-align:center;position:relative;
+}
+.dstat::after{content:'';position:absolute;bottom:0;left:20%;right:20%;height:1px;background:var(--cyan);opacity:0.3;box-shadow:0 0 8px var(--cyan-glow);}
+.dstat .n{font-family:var(--font-display);font-size:1.6rem;font-weight:900;color:var(--cyan);text-shadow:0 0 12px var(--cyan-glow);}
+.dstat .l{font-family:var(--font-display);font-size:0.5rem;letter-spacing:2px;color:var(--white3);margin-top:4px;text-transform:uppercase;}
+
+/* === DOMAIN SELECT === */
+.dsel{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
+.dchip{
+  padding:6px 14px;border:1px solid var(--border);
+  cursor:pointer;font-family:var(--font-display);font-size:0.55rem;
+  letter-spacing:1px;color:var(--white3);transition:all 0.3s;text-transform:uppercase;
+}
+.dchip:hover,.dchip.on{border-color:var(--cyan);color:var(--cyan);background:rgba(0,212,255,0.05);text-shadow:0 0 6px var(--cyan-glow);}
+
+/* === CHART === */
+.bars{display:flex;align-items:end;gap:6px;height:90px;margin-top:14px;}
+.bar{flex:1;min-height:2px;transition:height 0.6s;box-shadow:0 0 6px currentColor;}
+
+/* === BACK === */
+.back{background:none;border:none;color:var(--white3);cursor:pointer;font-family:var(--font-display);font-size:0.55rem;letter-spacing:2px;margin-bottom:14px;text-transform:uppercase;}
+.back:hover{color:var(--cyan);}
+
+/* === FOOTER === */
+.footer{
+  text-align:center;padding:30px 20px;margin-top:30px;
+  font-family:var(--font-display);font-size:0.5rem;
+  letter-spacing:3px;color:var(--white3);
+  border-top:1px solid var(--border);
+  text-transform:uppercase;
+}
+.footer a{color:var(--cyan);text-shadow:0 0 8px var(--cyan-glow);}
+
+/* === RESPONSIVE === */
+@media(max-width:700px){
+  .topbar{flex-direction:column;gap:6px;padding:8px 12px;}
+  .stats{flex-wrap:wrap;justify-content:center;gap:10px;}
+  .main{padding:12px;}
+  .dgrid{grid-template-columns:1fr;}
+  .nav button{padding:10px 12px;font-size:0.5rem;}
+}
+
+/* === ANIM === */
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.fadein{animation:fadeUp 0.35s ease;}
+@keyframes pop{0%{transform:scale(1)}50%{transform:scale(1.12)}100%{transform:scale(1)}}
+.xp-pop{animation:pop 0.3s ease;}
+.hidden{display:none!important;}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:rgba(0,212,255,0.2);}
+::-webkit-scrollbar-thumb:hover{background:rgba(0,212,255,0.4);}
+</style>
+</head>
+<body>
+
+<canvas id="tron-bg"></canvas>
+
+<div class="topbar">
+  <div class="logo">CISSP GRIND <span>// cloudnomad</span></div>
+  <div class="stats">
+    <div class="stat"><span class="stat-v stat-orange" id="streak">0</span> streak</div>
+    <div class="stat"><span class="lvl" id="level">01</span></div>
+    <div class="stat">
+      <span class="stat-v" id="xp-display">0</span>/<span id="xp-max">100</span>
+      <div class="xp-outer"><div class="xp-inner" id="xp-bar" style="width:0%"></div></div>
+    </div>
+    <div class="stat"><span class="stat-v" id="q-answered">0</span> ans</div>
+  </div>
+</div>
+
+<div class="nav" id="nav">
+  <button class="active" data-tab="dashboard">Home</button>
+  <button data-tab="study">Study</button>
+  <button data-tab="quiz">Quiz</button>
+  <button data-tab="flashcards">Flash</button>
+  <button data-tab="exam">Exam</button>
+  <button data-tab="resources">Resources</button>
+</div>
+
+<div class="main" id="app"></div>
+
+<script>
+// ==========================================
+// TRON GRID BACKGROUND
+// ==========================================
+(function(){
+  const c=document.getElementById('tron-bg'),ctx=c.getContext('2d');
+  function resize(){c.width=window.innerWidth;c.height=window.innerHeight;}
+  resize();window.addEventListener('resize',resize);
+
+  const lines=[];
+  for(let i=0;i<6;i++) lines.push({
+    x:Math.random()*2000, y:Math.random()*2000,
+    vx:(Math.random()-0.5)*0.4, vy:(Math.random()-0.5)*0.4,
+    len:80+Math.random()*200, dir:Math.random()>0.5?0:1
+  });
+
+  function draw(){
+    ctx.clearRect(0,0,c.width,c.height);
+
+    // Grid
+    ctx.strokeStyle='rgba(0,212,255,0.025)';
+    ctx.lineWidth=1;
+    const spacing=80;
+    for(let x=0;x<c.width;x+=spacing){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,c.height);ctx.stroke();}
+    for(let y=0;y<c.height;y+=spacing){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(c.width,y);ctx.stroke();}
+
+    // Moving light trails
+    lines.forEach(l=>{
+      const grad=l.dir===0?
+        ctx.createLinearGradient(l.x,l.y,l.x+l.len,l.y):
+        ctx.createLinearGradient(l.x,l.y,l.x,l.y+l.len);
+      grad.addColorStop(0,'rgba(0,212,255,0)');
+      grad.addColorStop(0.5,'rgba(0,212,255,0.12)');
+      grad.addColorStop(1,'rgba(0,212,255,0)');
+      ctx.strokeStyle=grad;
+      ctx.lineWidth=1;
+      ctx.beginPath();
+      if(l.dir===0){ctx.moveTo(l.x,l.y);ctx.lineTo(l.x+l.len,l.y);}
+      else{ctx.moveTo(l.x,l.y);ctx.lineTo(l.x,l.y+l.len);}
+      ctx.stroke();
+
+      l.x+=l.vx;l.y+=l.vy;
+      if(l.x>c.width+200||l.x<-200)l.vx*=-1;
+      if(l.y>c.height+200||l.y<-200)l.vy*=-1;
+    });
+
+    // Center glow
+    const rg=ctx.createRadialGradient(c.width/2,0,0,c.width/2,0,c.width*0.6);
+    rg.addColorStop(0,'rgba(0,212,255,0.04)');
+    rg.addColorStop(1,'transparent');
+    ctx.fillStyle=rg;ctx.fillRect(0,0,c.width,c.height);
+
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ==========================================
+// DOMAINS
+// ==========================================
+const DOMAINS=[
+{id:1,name:"Security & Risk Management",weight:"15%",desc:"Governance, compliance, legal, risk, BCP, ethics.",
+study:`
+<h4>Core Concepts</h4>
+<ul>
+<li><span class="key-term">CIA Triad</span> — Confidentiality, Integrity, Availability. Every control maps here.</li>
+<li><span class="key-term">DAD Triad</span> — Disclosure, Alteration, Destruction. The threats to CIA.</li>
+<li><span class="key-term">Due Care</span> — Doing what a reasonable person would. Implementing controls.</li>
+<li><span class="key-term">Due Diligence</span> — Researching risks before acting.</li>
+</ul>
+<div class="exam-tip">Due Care = doing. Due Diligence = researching. Shows up constantly.</div>
+<h4>Policy Hierarchy</h4>
+<ul>
+<li><span class="key-term">Policies</span> — Mandatory. High-level. "We SHALL encrypt PII."</li>
+<li><span class="key-term">Standards</span> — Mandatory. Specific. "We use AES-256."</li>
+<li><span class="key-term">Baselines</span> — Mandatory. Minimum config.</li>
+<li><span class="key-term">Guidelines</span> — NOT mandatory. Recommendations.</li>
+<li><span class="key-term">Procedures</span> — Step-by-step instructions.</li>
+</ul>
+<div class="exam-tip">Only GUIDELINES are optional. Everything else mandatory.</div>
+<h4>Risk Management</h4>
+<ul>
+<li><span class="key-term">Risk = Threat × Vulnerability × Impact</span></li>
+<li><span class="key-term">Quantitative</span> — Numbers. SLE = AV × EF. ALE = SLE × ARO.</li>
+<li><span class="key-term">Qualitative</span> — Categories. Delphi technique = anonymous experts.</li>
+<li><span class="key-term">Risk Responses</span>: Mitigate, Transfer (insurance), Avoid, Accept</li>
+</ul>
+<div class="exam-tip">ALE = SLE × ARO. If safeguard cost > ALE, don't do it.</div>
+<h4>Legal & Regulatory</h4>
+<ul>
+<li><span class="key-term">GDPR</span> — EU. 72-hour breach notification. 4% revenue fines.</li>
+<li><span class="key-term">HIPAA</span> — US healthcare. PHI protection.</li>
+<li><span class="key-term">SOX</span> — Financial reporting. <span class="key-term">GLBA</span> — Financial data.</li>
+<li><span class="key-term">Criminal</span> — Beyond reasonable doubt. <span class="key-term">Civil</span> — Preponderance of evidence.</li>
+</ul>
+<h4>BCP & DRP</h4>
+<ul>
+<li><span class="key-term">BIA</span> — Identifies critical functions + MTD, RTO, RPO.</li>
+<li><span class="key-term">RPO ≤ RTO ≤ MTD</span> — Always. RPO=data, RTO=systems, MTD=business.</li>
+</ul>
+<h4>Ethics</h4>
+<ul><li>(ISC)² Code: Protect society > Act honorably > Diligent service > Advance profession.</li></ul>
+<div class="exam-tip">"Protect society" is ALWAYS #1. Company vs public safety? Public wins.</div>
+`},
+{id:2,name:"Asset Security",weight:"10%",desc:"Classification, ownership, privacy, retention, destruction.",
+study:`
+<h4>Data Classification</h4>
+<ul>
+<li><span class="key-term">Government</span>: Top Secret > Secret > Confidential > Unclassified</li>
+<li><span class="key-term">Commercial</span>: Confidential > Private > Sensitive > Public</li>
+</ul>
+<h4>Data Roles</h4>
+<ul>
+<li><span class="key-term">Data Owner</span> — Management. Classifies data.</li>
+<li><span class="key-term">Data Custodian</span> — IT. Implements protections.</li>
+<li><span class="key-term">Data Controller</span> — GDPR: decides WHY/HOW data is processed.</li>
+<li><span class="key-term">Data Processor</span> — GDPR: processes on controller's behalf.</li>
+</ul>
+<div class="exam-tip">Owner = MANAGEMENT (not IT). Custodian = IT. "Who classifies?" = owner.</div>
+<h4>Data States</h4>
+<ul>
+<li><span class="key-term">At Rest</span> — AES. <span class="key-term">In Transit</span> — TLS/VPN. <span class="key-term">In Use</span> — Hardest to protect.</li>
+</ul>
+<h4>Sanitization</h4>
+<ul>
+<li><span class="key-term">Clearing</span> → <span class="key-term">Purging</span> → <span class="key-term">Destruction</span></li>
+<li>SSDs → crypto-erase (magnets don't work on flash). HDDs → degaussing works.</li>
+</ul>
+<h4>Privacy</h4>
+<ul>
+<li><span class="key-term">Data Minimization</span> — Collect only what you need.</li>
+<li><span class="key-term">Pseudonymization</span> — Reversible. <span class="key-term">Anonymization</span> — Irreversible.</li>
+</ul>
+`},
+{id:3,name:"Security Architecture & Engineering",weight:"13%",desc:"Models, crypto, physical security — math meets metal.",
+study:`
+<h4>Security Models</h4>
+<ul>
+<li><span class="key-term">Bell-LaPadula</span> — CONFIDENTIALITY. "No read up, no write down."</li>
+<li><span class="key-term">Biba</span> — INTEGRITY. "No read down, no write up."</li>
+<li><span class="key-term">Clark-Wilson</span> — INTEGRITY via well-formed transactions.</li>
+<li><span class="key-term">Brewer-Nash</span> — Chinese Wall. Conflicts of interest.</li>
+</ul>
+<div class="exam-tip">BLP = "Bell Lips sealed" (confidentiality). Biba = "Bible = truth" (integrity).</div>
+<h4>Cryptography</h4>
+<ul>
+<li><span class="key-term">Symmetric</span> — Same key. Fast. AES, DES, 3DES. Problem: key distribution.</li>
+<li><span class="key-term">Asymmetric</span> — Key pair. Slow. RSA, ECC, DH. Solves distribution.</li>
+<li><span class="key-term">Hashing</span> — One-way. SHA-256/SHA-3 (good). MD5/SHA-1 (broken).</li>
+<li><span class="key-term">Digital Signatures</span> — Hash + encrypt with PRIVATE key = integrity + auth + non-repudiation.</li>
+<li><span class="key-term">AES</span> — 128/192/256-bit. Gold standard. ECB mode = bad.</li>
+</ul>
+<div class="exam-tip">TLS = hybrid. Asymmetric swaps keys, symmetric encrypts data.</div>
+<h4>PKI</h4>
+<ul>
+<li><span class="key-term">CA</span> issues certs. <span class="key-term">RA</span> verifies identity. <span class="key-term">OCSP</span> > CRL for real-time checks.</li>
+</ul>
+<h4>Design Principles</h4>
+<ul>
+<li><span class="key-term">Defense in Depth</span> — Layers. <span class="key-term">Least Privilege</span> — Minimum access.</li>
+<li><span class="key-term">Fail Secure</span> — Locks on failure. <span class="key-term">Zero Trust</span> — Verify everything.</li>
+</ul>
+<h4>Physical</h4>
+<ul><li>FM-200 for data centers. Halon banned. HVAC: positive pressure, 64-75°F.</li></ul>
+`},
+{id:4,name:"Communication & Network Security",weight:"13%",desc:"OSI, protocols, firewalls, attacks — the pipes.",
+study:`
+<h4>OSI Model</h4>
+<ul>
+<li><span class="key-term">7 Application</span> HTTP, FTP, DNS — <span class="key-term">6 Presentation</span> Encryption — <span class="key-term">5 Session</span></li>
+<li><span class="key-term">4 Transport</span> TCP/UDP — <span class="key-term">3 Network</span> IP, Routers — <span class="key-term">2 Data Link</span> MAC, Switches — <span class="key-term">1 Physical</span></li>
+</ul>
+<div class="exam-tip">"Please Do Not Throw Sausage Pizza Away" (1→7).</div>
+<h4>Key Protocols & Ports</h4>
+<ul>
+<li><span class="key-term">Ports</span>: FTP(21) SSH(22) SMTP(25) DNS(53) HTTP(80) HTTPS(443) LDAP(389) RDP(3389)</li>
+<li><span class="key-term">TCP 3-Way</span>: SYN → SYN-ACK → ACK</li>
+<li><span class="key-term">IPSec</span>: AH (integrity only) vs ESP (encrypt + integrity). Tunnel vs Transport mode.</li>
+<li><span class="key-term">TLS</span> 1.2+ required. 1.3 best. SSH replaced Telnet.</li>
+</ul>
+<h4>Devices</h4>
+<ul>
+<li><span class="key-term">Firewall</span>: Packet filter(L3), Stateful(L3-4), Proxy(L7), NGFW(all)</li>
+<li><span class="key-term">IDS</span> = passive, alerts. <span class="key-term">IPS</span> = active, blocks inline.</li>
+</ul>
+<h4>Attacks</h4>
+<ul>
+<li><span class="key-term">ARP Spoofing</span>(L2), <span class="key-term">DNS Poisoning</span>, <span class="key-term">DDoS</span>, <span class="key-term">MITM</span></li>
+</ul>
+<h4>Wireless</h4>
+<ul><li>WEP(dead) → WPA → WPA2(AES) → WPA3(SAE). 802.1X for enterprise.</li></ul>
+`},
+{id:5,name:"Identity & Access Management",weight:"13%",desc:"Authentication, authorization, access models.",
+study:`
+<h4>Authentication Factors</h4>
+<ul>
+<li><span class="key-term">Know</span>(password) <span class="key-term">Have</span>(token) <span class="key-term">Are</span>(biometric)</li>
+<li><span class="key-term">MFA</span> = 2+ DIFFERENT categories. Two passwords ≠ MFA.</li>
+</ul>
+<h4>Biometrics</h4>
+<ul>
+<li><span class="key-term">Type I / FRR</span> — Rejects legit user. Annoying.</li>
+<li><span class="key-term">Type II / FAR</span> — Lets impostor in. DANGER.</li>
+<li><span class="key-term">CER/EER</span> — Where FRR=FAR. Lower = better.</li>
+</ul>
+<div class="exam-tip">Type 2 = FAR = security risk. CER compares biometric systems.</div>
+<h4>Access Control Models</h4>
+<ul>
+<li><span class="key-term">DAC</span> — Owner decides. ACLs. <span class="key-term">MAC</span> — System labels. Most restrictive.</li>
+<li><span class="key-term">RBAC</span> — Job roles. Most common. <span class="key-term">ABAC</span> — Attributes. Most flexible.</li>
+</ul>
+<h4>SSO & Federation</h4>
+<ul>
+<li><span class="key-term">OAuth</span> = AUTHORIZATION. <span class="key-term">OIDC</span> = Auth ON TOP of OAuth.</li>
+<li><span class="key-term">SAML</span> = XML, enterprise SSO. <span class="key-term">Kerberos</span> = tickets, symmetric, AD.</li>
+<li><span class="key-term">LDAP</span> = port 389 (636 LDAPS).</li>
+</ul>
+<h4>Lifecycle</h4>
+<ul><li>Provision → Review → Revoke. <span class="key-term">Privilege Creep</span> = accumulating access. Fix: periodic reviews.</li></ul>
+`},
+{id:6,name:"Security Assessment & Testing",weight:"12%",desc:"Pentests, audits, SIEM — finding holes first.",
+study:`
+<h4>Vuln Assessment vs Pentest</h4>
+<ul>
+<li><span class="key-term">Vuln Assessment</span> — Scan and report. No exploitation.</li>
+<li><span class="key-term">Pentest</span> — Exploit vulns. Needs WRITTEN AUTHORIZATION.</li>
+</ul>
+<h4>Pentest Types</h4>
+<ul>
+<li><span class="key-term">Black Box</span> = no knowledge. <span class="key-term">White Box</span> = full knowledge. <span class="key-term">Gray</span> = partial.</li>
+</ul>
+<h4>Teams</h4>
+<ul><li><span class="key-term">Red</span>=offense. <span class="key-term">Blue</span>=defense. <span class="key-term">Purple</span>=collab.</li></ul>
+<h4>Testing</h4>
+<ul>
+<li><span class="key-term">SAST</span> = static code analysis. <span class="key-term">DAST</span> = test running app. <span class="key-term">Fuzzing</span> = random input.</li>
+</ul>
+<h4>SOC Reports</h4>
+<ul>
+<li><span class="key-term">SOC 1</span> financial. <span class="key-term">SOC 2</span> security (Type I=snapshot, Type II=over time). <span class="key-term">SOC 3</span> public.</li>
+</ul>
+<div class="exam-tip">SOC 2 Type II = gold standard. Shows controls WORK over time.</div>
+<h4>SIEM</h4>
+<ul><li>Collects, correlates, analyzes logs. Alerts on threats. Track MTTD, MTTR.</li></ul>
+`},
+{id:7,name:"Security Operations",weight:"13%",desc:"IR, forensics, DR, monitoring — when it hits the fan.",
+study:`
+<h4>Incident Response (ORDER MATTERS)</h4>
+<ul>
+<li><span class="key-term">1. Preparation</span> — Team, tools, playbooks. Before anything.</li>
+<li><span class="key-term">2. Detection</span> — Spot it. SIEM, IDS, reports.</li>
+<li><span class="key-term">3. Containment</span> — Stop the bleeding.</li>
+<li><span class="key-term">4. Eradication</span> — Rip the threat out.</li>
+<li><span class="key-term">5. Recovery</span> — Restore. Watch for recurrence.</li>
+<li><span class="key-term">6. Lessons Learned</span> — Post-mortem. NOT optional.</li>
+</ul>
+<div class="exam-tip">Never skip containment. Lessons Learned is required. Order is heavily tested.</div>
+<h4>Forensics</h4>
+<ul>
+<li><span class="key-term">Volatility Order</span>: CPU Regs → Cache → RAM → Swap → Disk → Removable</li>
+<li><span class="key-term">Chain of Custody</span> — Document every hand. Break = inadmissible.</li>
+<li>Image first. Hash verify. NEVER touch the original.</li>
+</ul>
+<h4>Disaster Recovery</h4>
+<ul>
+<li><span class="key-term">Hot</span>=hours/$$$$$. <span class="key-term">Warm</span>=days/$$$. <span class="key-term">Cold</span>=weeks/$.</li>
+<li><span class="key-term">RAID</span>: 0(stripe) 1(mirror) 5(parity,3+) 6(double,4+) 10(mirror+stripe)</li>
+</ul>
+<h4>Backups</h4>
+<ul>
+<li><span class="key-term">Full</span> = slow backup, fast restore. <span class="key-term">Incremental</span> = fast backup, slow restore.</li>
+<li><span class="key-term">Differential</span> = since last full. Only need full + latest diff to restore.</li>
+</ul>
+<h4>Tools</h4>
+<ul><li><span class="key-term">SOAR</span> automation. <span class="key-term">EDR</span> endpoints. <span class="key-term">XDR</span> cross-platform. <span class="key-term">Honeypot</span> decoy.</li></ul>
+`},
+{id:8,name:"Software Development Security",weight:"11%",desc:"SDLC, OWASP, secure code, DevSecOps.",
+study:`
+<h4>SDLC Models</h4>
+<ul>
+<li><span class="key-term">Waterfall</span> = linear. <span class="key-term">Agile</span> = sprints. <span class="key-term">DevSecOps</span> = security in pipeline.</li>
+</ul>
+<div class="exam-tip">"Shift left" = security EARLIER. 10-100x cheaper to fix in dev vs prod.</div>
+<h4>OWASP Top Hits</h4>
+<ul>
+<li><span class="key-term">Injection</span>(SQLi, XSS) → parameterized queries</li>
+<li><span class="key-term">Broken Auth/Access Control</span> → MFA, deny by default</li>
+<li><span class="key-term">XSS</span> → output encoding. <span class="key-term">CSRF</span> → anti-CSRF tokens. <span class="key-term">SSRF</span> → input validation.</li>
+</ul>
+<h4>Secure Coding</h4>
+<ul>
+<li><span class="key-term">Whitelist > Blacklist</span> for input validation. Always server-side.</li>
+<li><span class="key-term">Parameterized Queries</span> — Kill SQLi. Never concatenate user input.</li>
+</ul>
+<h4>Database</h4>
+<ul>
+<li><span class="key-term">Aggregation</span> = combining non-sensitive → sensitive. <span class="key-term">Inference</span> = deducing from clues.</li>
+<li><span class="key-term">Polyinstantiation</span> = multiple rows, same key, diff classifications.</li>
+</ul>
+<h4>Testing</h4>
+<ul><li>Unit → Integration → System → Acceptance → <span class="key-term">Regression</span> (did new code break old?)</li></ul>
+`}
+];
+
+// ==========================================
+// QUESTIONS
+// ==========================================
+const QUESTIONS=[
+{d:1,q:"What is the PRIMARY purpose of a security policy?",o:["Define technical controls","Inform management of risks","Communicate management's security expectations and direction","Satisfy audit requirements"],a:2,e:"Policies communicate management's intent and direction for security. Technical controls come from standards/procedures."},
+{d:1,q:"Asset=$100K, EF=25%, ARO=2/year. ALE?",o:["$25,000","$50,000","$100,000","$12,500"],a:1,e:"SLE=$100K×0.25=$25K. ALE=$25K×2=$50,000."},
+{d:1,q:"Which risk method uses the Delphi technique?",o:["Quantitative","Qualitative","Hybrid","Operational"],a:1,e:"Delphi=anonymous expert opinions=qualitative."},
+{d:1,q:"Which is NOT mandatory?",o:["Policies","Standards","Guidelines","Baselines"],a:2,e:"Guidelines are recommendations. Everything else is mandatory."},
+{d:1,q:"Highest (ISC)² ethics priority?",o:["Advance profession","Diligent service","Act honorably","Protect society"],a:3,e:"Protect society > Act honorably > Diligent service > Advance profession."},
+{d:1,q:"Organization transfers risk by:",o:["Firewalls","Insurance","Accepting risk","Eliminating threat"],a:1,e:"Insurance=classic risk transfer."},
+{d:1,q:"Due care vs due diligence?",o:["Care=reactive, diligence=proactive","Care=doing, diligence=researching","Care=IT, diligence=management","No difference"],a:1,e:"Care=action. Diligence=research."},
+{d:1,q:"BIA primarily:",o:["Lists IT assets","Identifies critical functions and disruption impact","Creates DR plan","Implements controls"],a:1,e:"BIA identifies critical functions, determines impact, establishes MTD/RTO/RPO."},
+{d:1,q:"RPO relates to:",o:["System restore speed","Max acceptable data loss","Total downtime","Backup frequency only"],a:1,e:"RPO=max data loss in time."},
+{d:1,q:"GDPR breach notification deadline:",o:["24h","48h","72h","1 week"],a:2,e:"72 hours."},
+{d:1,q:"Quantitative risk metric:",o:["Risk matrix","ALE","Heat map","Expert judgment"],a:1,e:"ALE=monetary=quantitative."},
+{d:1,q:"Standards vs guidelines:",o:["Standards optional","Standards mandatory, guidelines optional","Guidelines from management","Standards higher level"],a:1,e:"Standards=mandatory+specific. Guidelines=advisory."},
+{d:2,q:"Who classifies data?",o:["Custodian","Sysadmin","Data owner","Security officer"],a:2,e:"Owner (management) classifies."},
+{d:2,q:"Best SSD sanitization?",o:["Degaussing","Crypto-erase","7-pass overwrite","Formatting"],a:1,e:"Magnets don't work on flash. Crypto-erase destroys the key."},
+{d:2,q:"Data remanence is:",o:["Cloud backup","Residual data after deletion","Data in transit","Temp cache"],a:1,e:"Ghost data on media after deletion."},
+{d:2,q:"GDPR: who decides WHY data is processed?",o:["Processor","Steward","Controller","Custodian"],a:2,e:"Controller decides purposes and means."},
+{d:2,q:"Pseudonymization vs anonymization:",o:["Same","Pseudo reversible, anon not","Anon reversible, pseudo not","Neither"],a:1,e:"Pseudo=reversible with key. Anon=permanent."},
+{d:2,q:"Who implements backups?",o:["Owner","Custodian","Steward","Processor"],a:1,e:"Custodian (IT) implements technical controls."},
+{d:2,q:"Gov 'Secret' ≈ commercial:",o:["Public","Sensitive","Private","Confidential"],a:2,e:"Secret≈Private."},
+{d:2,q:"Collect minimum needed data:",o:["Purpose limitation","Data minimization","Storage limitation","Integrity"],a:1,e:"Data minimization."},
+{d:2,q:"Most secure sanitization:",o:["Clearing","Purging","Destruction","Formatting"],a:2,e:"Physical destruction=most secure."},
+{d:2,q:"Hardest data state to protect:",o:["At rest","In transit","In use","Archived"],a:2,e:"In use=in memory=must be decrypted."},
+{d:3,q:"Bell-LaPadula enforces:",o:["Integrity","Confidentiality","Availability","Non-repudiation"],a:1,e:"BLP=confidentiality."},
+{d:3,q:"Biba's primary rule:",o:["No read up, no write down","No read down, no write up","No read no write","Same level only"],a:1,e:"Biba=integrity. Opposite of BLP."},
+{d:3,q:"Current symmetric standard:",o:["DES","3DES","AES","RC4"],a:2,e:"AES. 128/192/256-bit."},
+{d:3,q:"Digital signatures provide:",o:["Confidentiality","Integrity+auth+non-repudiation","Availability","Anonymity"],a:1,e:"Hash+private key=integrity+auth+non-repudiation."},
+{d:3,q:"Which block mode reveals patterns?",o:["CBC","CTR","ECB","GCM"],a:2,e:"ECB=identical blocks=identical ciphertext."},
+{d:3,q:"OCSP vs CRLs:",o:["Offline","Real-time cert checking","Symmetric crypto","Eliminates CAs"],a:1,e:"OCSP=real-time. CRLs can be stale."},
+{d:3,q:"Defense in depth:",o:["Strongest single control","Multiple layers","All budget on perimeter","Encryption only"],a:1,e:"Layers. One fails, others catch it."},
+{d:3,q:"Fail secure means:",o:["Keeps running","Locks down on failure","Alerts admins","Reboots"],a:1,e:"Defaults to locked/denied."},
+{d:3,q:"TLS hybrid approach:",o:["Symmetric only","Asymmetric only","Asymmetric exchanges symmetric key, symmetric encrypts","Hashing replaces encryption"],a:2,e:"Best of both worlds."},
+{d:3,q:"Clark-Wilson uses:",o:["Labels","Well-formed transactions","Encryption","Firewalls"],a:1,e:"Well-formed transactions+separation of duties."},
+{d:3,q:"Diffie-Hellman is for:",o:["Encryption","Hashing","Key exchange","Signatures"],a:2,e:"Key exchange over insecure channel."},
+{d:3,q:"Data center fire suppression:",o:["Water","CO2","FM-200","Halon"],a:2,e:"FM-200=clean agent. Halon banned."},
+{d:4,q:"Routers at OSI layer:",o:["1","2","3","4"],a:2,e:"L3=Network=IP addresses."},
+{d:4,q:"IPSec ESP provides:",o:["Integrity only","Confidentiality only","Confidentiality+integrity+auth","Routing"],a:2,e:"ESP=full package. AH=no encryption."},
+{d:4,q:"HTTPS port:",o:["80","8080","443","8443"],a:2,e:"443."},
+{d:4,q:"Stateful vs packet filter:",o:["Faster","Tracks connection states","Uses MACs","L7"],a:1,e:"Stateful tracks connection state."},
+{d:4,q:"ARP spoofing layer:",o:["1","2","3","7"],a:1,e:"ARP=L2."},
+{d:4,q:"WPA3 improvement:",o:["WEP fallback","SAE handshake","Longer SSIDs","No encryption"],a:1,e:"SAE=better offline attack protection."},
+{d:4,q:"VPN tunnel mode:",o:["Transport","Tunnel","Hybrid","Passthrough"],a:1,e:"Tunnel=new IP header=site-to-site."},
+{d:4,q:"DNS poisoning targets:",o:["DNS cache","Physical servers","Zone transfers","DHCP"],a:0,e:"Corrupts cache→redirects users."},
+{d:4,q:"TCP handshake order:",o:["ACK SYN SYN-ACK","SYN SYN-ACK ACK","SYN ACK SYN-ACK","FIN ACK RST"],a:1,e:"SYN→SYN-ACK→ACK."},
+{d:4,q:"IPS vs IDS:",o:["Only detects","Blocks inline","Signatures only","Passive"],a:1,e:"IPS=active+inline. IDS=passive."},
+{d:4,q:"Replaced Telnet:",o:["FTP","SSH","SNMP","RDP"],a:1,e:"SSH(22) replaced Telnet(23)."},
+{d:4,q:"802.1X provides:",o:["Encryption","Port-based NAC","IP addressing","Routing"],a:1,e:"Port-based network access control."},
+{d:5,q:"Password+PIN together:",o:["Two-factor","Single-factor","Three-factor","Biometric"],a:1,e:"Both 'know.' Same category=single factor."},
+{d:5,q:"CER represents:",o:["Max throughput","Where FAR=FRR","Fastest auth","Timeout"],a:1,e:"CER=FAR equals FRR. Lower=better."},
+{d:5,q:"Most restrictive model:",o:["DAC","RBAC","MAC","ABAC"],a:2,e:"MAC=system labels=most restrictive."},
+{d:5,q:"OAuth 2.0 is for:",o:["Authentication","Authorization","Encryption","Auditing"],a:1,e:"OAuth=authorization. OIDC adds authentication."},
+{d:5,q:"Kerberos encryption:",o:["Asymmetric","Symmetric","Hybrid","None"],a:1,e:"Symmetric. KDC shares secrets."},
+{d:5,q:"Bigger security concern:",o:["Type I (FRR)","Type II (FAR)","Type III","CER"],a:1,e:"FAR=impostor gets in=danger."},
+{d:5,q:"Privilege creep:",o:["Forgot password","Accumulating access over time","Deleted admin","Disabled MFA"],a:1,e:"Fix: periodic access reviews."},
+{d:5,q:"SAML format:",o:["JSON","XML","Binary","CSV"],a:1,e:"SAML=XML."},
+{d:5,q:"RBAC based on:",o:["Ownership","Labels","Job role","Time"],a:2,e:"Role-based."},
+{d:5,q:"Accountability requires:",o:["Auth+authz+encrypt+log","ID+auth+authz+audit","FW+IDS+IPS+SIEM","Pwd+token+bio+cert"],a:1,e:"ID→Auth→Authz→Audit=Accountability."},
+{d:5,q:"LDAP port:",o:["443","389","636","22"],a:1,e:"389. LDAPS=636."},
+{d:5,q:"Uses attributes for access:",o:["DAC","MAC","RBAC","ABAC"],a:3,e:"ABAC=most flexible."},
+{d:6,q:"Pentest with NO knowledge:",o:["White","Gray","Black","Red"],a:2,e:"Black box."},
+{d:6,q:"SOC 2 Type II vs I:",o:["Cheaper","Controls over time","Financial","Public"],a:1,e:"Type II=period. Type I=snapshot."},
+{d:6,q:"SAST analyzes:",o:["Running apps","Source code without execution","Traffic","Physical"],a:1,e:"Static analysis."},
+{d:6,q:"Fuzzing:",o:["Encrypts","Random input to find vulns","Monitors","Creates accounts"],a:1,e:"Random garbage→crashes→vulns."},
+{d:6,q:"Vuln assessment vs pentest:",o:["More expensive","Finds but doesn't exploit","Physical access","Web only"],a:1,e:"Assessment=find. Pentest=exploit."},
+{d:6,q:"Purple team:",o:["Attack","Defend","Red+Blue collab","Policy"],a:2,e:"Bridges offense and defense."},
+{d:6,q:"SIEM:",o:["Security Incident Emergency Mgmt","Security Information Event Management","System Integration Error Mon","Secure Internet Email Mgmt"],a:1,e:"Log collection+correlation+alerting."},
+{d:6,q:"Requires written authorization:",o:["Vuln scan","Penetration test","Risk assessment","Audit"],a:1,e:"Pentests ALWAYS need written ROE."},
+{d:6,q:"DAST tests by:",o:["Source code","Running app from outside","Docs","Static analysis"],a:1,e:"Tests running app. Black box."},
+{d:6,q:"MTTD measures:",o:["Failure time","Time to discover incident","Patch speed","Restore speed"],a:1,e:"Time from incident to discovery."},
+{d:7,q:"First IR step:",o:["Containment","Eradication","Preparation","Detection"],a:2,e:"Preparation first. Always."},
+{d:7,q:"Collect FIRST in forensics:",o:["Hard drive","RAM","CPU registers/cache","Removable"],a:2,e:"Most volatile first."},
+{d:7,q:"Hot site:",o:["No equipment","Fully operational, hours","Weeks","Mobile"],a:1,e:"Full duplicate. Most expensive."},
+{d:7,q:"Most tapes for restore:",o:["Full","Incremental","Differential","Mirror"],a:1,e:"Incremental=full+every incremental."},
+{d:7,q:"Chain of custody:",o:["Encrypted","Documented+traceable handling","Suspects found","Patched"],a:1,e:"Who had it, when, what. Break=inadmissible."},
+{d:7,q:"RAID 5 min disks:",o:["2","3","4","5"],a:1,e:"3+ disks."},
+{d:7,q:"After containment:",o:["Recovery","Lessons","Eradication","Preparation"],a:2,e:"Contain→Eradicate→Recover→Lessons."},
+{d:7,q:"Honeypot:",o:["Backup","Attract+study attackers","Spam filter","Encrypt"],a:1,e:"Decoy system."},
+{d:7,q:"Differential=since last:",o:["Incremental","Differential","Full","Any"],a:2,e:"Since last FULL."},
+{d:7,q:"CAB does:",o:["IR","Review/approve changes","Physical","Classification"],a:1,e:"Change Advisory Board."},
+{d:7,q:"EDR:",o:["Encrypted Data Recovery","Endpoint Detection Response","Emergency DR","External Replication"],a:1,e:"Endpoint monitoring+response."},
+{d:7,q:"Forensic rule #1:",o:["Work on original","Bit-for-bit copy, analyze copy","Delete logs","Reboot first"],a:1,e:"Never touch original."},
+{d:8,q:"Shift left:",o:["Security later","Security earlier in SDLC","Left-aligned code","Test in prod"],a:1,e:"Earlier=cheaper."},
+{d:8,q:"Best SQLi defense:",o:["Validation alone","WAF","Parameterized queries","DB passwords"],a:2,e:"Separates code from data."},
+{d:8,q:"XSS:",o:["SQL commands","Scripts injected into pages","Brute force","Scanning"],a:1,e:"Stored, Reflected, DOM-based."},
+{d:8,q:"CSRF:",o:["Cracking passwords","Tricking auth'd user into actions","Port scan","Buffer overflow"],a:1,e:"Fix: anti-CSRF tokens."},
+{d:8,q:"Aggregation:",o:["Combining non-sensitive→sensitive","Encrypting","Backups","Normalizing"],a:0,e:"Puzzle pieces→sensitive conclusion."},
+{d:8,q:"Ensures new code didn't break old:",o:["Unit","Integration","Regression","Acceptance"],a:2,e:"Regression testing."},
+{d:8,q:"Agile emphasizes:",o:["Sequential","Heavy docs","Iterative+frequent delivery","All testing at end"],a:2,e:"Sprints+continuous feedback."},
+{d:8,q:"Input validation prefers:",o:["Blacklist","Whitelist","No validation","Client-side"],a:1,e:"Whitelist=known good only."},
+{d:8,q:"Polyinstantiation prevents:",o:["SQLi","Inference attacks","Overflows","XSS"],a:1,e:"Diff data at diff classifications."},
+{d:8,q:"Container best practice:",o:["Root","Minimal images+scanning","No logging","Share host network"],a:1,e:"Minimal, scan, no root."},
+{d:8,q:"Waterfall:",o:["Iterative","Linear sequential","No docs","CD"],a:1,e:"Linear. Rigid."},
+{d:8,q:"SSRF:",o:["Forge signatures","Server requests internal resources","DNS spoof","Physical bypass"],a:1,e:"Server hits internal resources attacker can't reach."},
+];
+
+// ==========================================
+// FLASHCARDS
+// ==========================================
+const FLASHCARDS=[
+{d:1,front:"CIA Triad",back:"Confidentiality, Integrity, Availability\nEvery control maps here."},
+{d:1,front:"ALE Formula",back:"ALE = SLE × ARO\nSLE = Asset Value × EF\nAnnual loss in dollars."},
+{d:1,front:"Risk Responses",back:"Mitigate (reduce)\nTransfer (insurance)\nAvoid (stop activity)\nAccept (document it)"},
+{d:1,front:"Due Care vs Diligence",back:"Care = DOING (implementing)\nDiligence = RESEARCHING"},
+{d:1,front:"Policy Hierarchy",back:"Policy > Standard > Baseline > Guideline > Procedure\nOnly GUIDELINES are optional."},
+{d:1,front:"RPO vs RTO vs MTD",back:"RPO = max data loss\nRTO = recovery time target\nMTD = business deadline\nRPO ≤ RTO ≤ MTD"},
+{d:1,front:"(ISC)² Ethics",back:"1. Protect society\n2. Act honorably\n3. Diligent service\n4. Advance profession"},
+{d:2,front:"Owner vs Custodian",back:"Owner = Management. Classifies.\nCustodian = IT. Implements."},
+{d:2,front:"Data States",back:"Rest → AES\nTransit → TLS\nUse → Hardest to protect"},
+{d:2,front:"Sanitization",back:"Clear → Purge → Destroy\nSSDs = crypto-erase\nHDDs = degauss"},
+{d:2,front:"Classification (Gov)",back:"Top Secret > Secret\n> Confidential > Unclassified"},
+{d:2,front:"Pseudo vs Anon",back:"Pseudo = reversible (key)\nAnon = irreversible (gone)"},
+{d:3,front:"Bell-LaPadula",back:"CONFIDENTIALITY\nNo read up, no write down\n\"Bell Lips sealed\""},
+{d:3,front:"Biba",back:"INTEGRITY\nNo read down, no write up\n\"Biba = Bible = truth\""},
+{d:3,front:"Symmetric vs Asymmetric",back:"Sym: same key, FAST (AES)\nAsym: key pair, SLOW (RSA)\nTLS uses both"},
+{d:3,front:"Digital Signature",back:"Hash → encrypt with PRIVATE key\nProvides: integrity + auth\n+ non-repudiation"},
+{d:3,front:"AES",back:"128/192/256-bit\nBlock cipher. Gold standard.\nReplaced DES."},
+{d:3,front:"PKI",back:"CA = issues certs\nRA = verifies identity\nOCSP = real-time check\nCRL = revocation list"},
+{d:4,front:"OSI 7 Layers",back:"7-App 6-Present 5-Session\n4-Transport 3-Network\n2-DataLink 1-Physical"},
+{d:4,front:"IPSec",back:"AH = integrity only (NO encrypt)\nESP = encrypt + integrity\nTunnel = new header\nTransport = original"},
+{d:4,front:"Key Ports",back:"SSH:22 DNS:53 HTTP:80\nHTTPS:443 LDAP:389\nRDP:3389 FTP:21"},
+{d:4,front:"IDS vs IPS",back:"IDS = detect + alert (passive)\nIPS = detect + BLOCK (active)"},
+{d:4,front:"Wireless",back:"WEP → WPA → WPA2(AES)\n→ WPA3(SAE) best"},
+{d:5,front:"Auth Factors",back:"Know (password)\nHave (token)\nAre (biometric)\nMFA = different categories"},
+{d:5,front:"Biometric Errors",back:"Type I/FRR = reject legit (annoying)\nType II/FAR = accept fake (DANGER)\nCER = where equal (lower=better)"},
+{d:5,front:"Access Models",back:"DAC = owner (ACLs)\nMAC = system labels (strictest)\nRBAC = roles (common)\nABAC = attributes (flexible)"},
+{d:5,front:"Auth Protocols",back:"OAuth = AUTHORIZATION\nOIDC = Auth + OAuth\nSAML = XML enterprise\nKerberos = tickets + AD"},
+{d:5,front:"Kerberos",back:"User → KDC: get TGT\nUser → TGS: get service ticket\nSymmetric encryption"},
+{d:6,front:"Pentest Types",back:"Black = no knowledge\nWhite = full (most thorough)\nGray = partial"},
+{d:6,front:"SOC Reports",back:"SOC 1 = financial\nSOC 2 = security\n  Type I = snapshot\n  Type II = over time\nSOC 3 = public"},
+{d:6,front:"SAST vs DAST",back:"SAST = source code (white box)\nDAST = running app (black box)\nIAST = hybrid"},
+{d:6,front:"Team Colors",back:"Red = Offense\nBlue = Defense\nPurple = Collab\nWhite = Referees"},
+{d:7,front:"IR Lifecycle",back:"Prep → Detect → Contain\n→ Eradicate → Recover\n→ Lessons Learned"},
+{d:7,front:"Volatility Order",back:"CPU Regs → Cache → RAM\n→ Swap → Disk → Removable\nMost volatile FIRST"},
+{d:7,front:"Recovery Sites",back:"Hot = hours ($$$$$)\nWarm = days ($$$)\nCold = weeks ($)"},
+{d:7,front:"Backups",back:"Full = slow backup, fast restore\nIncremental = fast backup, slow restore\nDifferential = since last full"},
+{d:7,front:"RAID",back:"0=stripe 1=mirror\n5=parity(3+) 6=double(4+)\n10=mirror+stripe"},
+{d:8,front:"OWASP Hits",back:"Injection, Broken Auth,\nBroken Access, XSS,\nCSRF, SSRF, Misconfig"},
+{d:8,front:"Shift Left",back:"Security EARLIER in SDLC\n10-100x cheaper to fix early"},
+{d:8,front:"SDLC Models",back:"Waterfall = linear\nAgile = sprints\nDevSecOps = security in pipeline"},
+{d:8,front:"SQLi Defense",back:"#1: Parameterized queries\nNever concatenate user input"},
+{d:8,front:"Aggregation vs Inference",back:"Aggregation = combining pieces\nInference = deducing from clues\nBoth bypass direct access"},
+];
+
+// ==========================================
+// STATE
+// ==========================================
+const SK='cissp_grind_v4';
+let state=load();
+function defaults(){return{xp:0,level:1,streak:0,lastStudy:null,totalAns:0,totalCorr:0,ds:{},exams:[]};}
+function load(){try{return{...defaults(),...JSON.parse(localStorage.getItem(SK))};}catch{return defaults();}}
+function save(){localStorage.setItem(SK,JSON.stringify(state));}
+function xp(n){state.xp+=n;const need=state.level*100;if(state.xp>=need){state.xp-=need;state.level++;}save();topbar();const e=document.getElementById('xp-display');if(e){e.classList.add('xp-pop');setTimeout(()=>e.classList.remove('xp-pop'),300);}}
+function streak(){const t=new Date().toDateString();if(state.lastStudy!==t){const y=new Date(Date.now()-864e5).toDateString();state.streak=state.lastStudy===y?state.streak+1:1;state.lastStudy=t;save();}}
+function ds(d){if(!state.ds[d])state.ds[d]={a:0,c:0};return state.ds[d];}
+function topbar(){
+  document.getElementById('streak').textContent=state.streak;
+  document.getElementById('level').textContent=String(state.level).padStart(2,'0');
+  document.getElementById('xp-bar').style.width=(state.xp/(state.level*100))*100+'%';
+  document.getElementById('xp-display').textContent=state.xp;
+  document.getElementById('xp-max').textContent=state.level*100;
+  document.getElementById('q-answered').textContent=state.totalAns;
+}
+
+// ==========================================
+// NAV
+// ==========================================
+let tab='dashboard';
+document.querySelectorAll('.nav button').forEach(b=>{b.addEventListener('click',()=>{tab=b.dataset.tab;document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));b.classList.add('active');render();});});
+function render(){
+  const a=document.getElementById('app');
+  ({dashboard:renderDash,study:renderStudy,quiz:renderQuiz,flashcards:renderFlash,exam:renderExam,resources:renderRes})[tab](a);
+}
+
+// ==========================================
+// DASHBOARD
+// ==========================================
+function renderDash(a){
+  const pct=state.totalAns?Math.round(state.totalCorr/state.totalAns*100):0;
+  const scores=DOMAINS.map(d=>{const s=ds(d.id);return s.a?Math.round(s.c/s.a*100):0;});
+  const weak=scores.indexOf(Math.min(...scores));
+  a.innerHTML=`<div class="fadein">
+    <div class="dgrid2">
+      <div class="dstat"><div class="n">${state.totalAns}</div><div class="l">Answered</div></div>
+      <div class="dstat"><div class="n">${pct}%</div><div class="l">Accuracy</div></div>
+      <div class="dstat"><div class="n" style="color:var(--orange)">${state.streak}</div><div class="l">Streak</div></div>
+      <div class="dstat"><div class="n" style="color:var(--white)">${state.level}</div><div class="l">Level</div></div>
+      <div class="dstat"><div class="n">${state.exams.length}</div><div class="l">Exams</div></div>
+      <div class="dstat"><div class="n">${state.exams.length?Math.max(...state.exams)+'%':'--'}</div><div class="l">Best</div></div>
+    </div>
+    <div class="card">
+      <h2>Domain Status</h2>
+      <div class="bars">
+        ${DOMAINS.map((d,i)=>`<div style="flex:1;text-align:center">
+          <div style="height:90px;display:flex;align-items:end;justify-content:center">
+            <div class="bar" style="width:100%;height:${Math.max(scores[i],2)}%;color:${scores[i]>=70?'var(--green)':scores[i]>=40?'var(--orange)':'var(--red)'};background:currentColor;"></div>
+          </div>
+          <div style="font-family:var(--font-mono);font-size:0.55rem;color:var(--white3);margin-top:3px">D${d.id}</div>
+          <div style="font-family:var(--font-mono);font-size:0.55rem;color:${scores[i]>=70?'var(--green)':scores[i]>=40?'var(--orange)':'var(--red)'}">${scores[i]}%</div>
+        </div>`).join('')}
+      </div>
+    </div>
+    ${state.totalAns>0?`<div class="card">
+      <h2>Focus Area</h2>
+      <p style="color:var(--white2);font-size:0.88rem">Domain ${DOMAINS[weak].id} — <strong style="color:var(--orange)">${DOMAINS[weak].name}</strong> at ${scores[weak]}%.</p>
+      <div class="btns">
+        <button class="btn" onclick="studyD(${DOMAINS[weak].id})">Study</button>
+        <button class="btn btn-orange" onclick="startQuiz([${DOMAINS[weak].id}])">Quiz</button>
+      </div>
+    </div>`:`<div class="card">
+      <h2>Begin</h2>
+      <p style="color:var(--white2);font-size:0.88rem">Start with Domain 1 or jump straight into a quiz.</p>
+      <div class="btns">
+        <button class="btn" onclick="studyD(1)">Domain 1</button>
+        <button class="btn btn-orange" onclick="startQuiz([1,2,3,4,5,6,7,8])">All Domains</button>
+      </div>
+    </div>`}
+    <div class="footer">Built by <a href="https://cloudnomad.us" target="_blank">cloudnomad.us</a> — free forever</div>
+  </div>`;
+}
+
+// ==========================================
+// STUDY
+// ==========================================
+let studyDom=null;
+function renderStudy(a){
+  if(studyDom){
+    const d=DOMAINS.find(x=>x.id===studyDom);
+    a.innerHTML=`<div class="fadein">
+      <button class="back" onclick="studyDom=null;render()">← BACK</button>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:start;flex-wrap:wrap;gap:10px">
+          <div><h2>D${d.id} — ${d.name}</h2><span class="dweight">${d.weight}</span></div>
+          <div class="btns" style="margin:0">
+            <button class="btn btn-orange" onclick="startQuiz([${d.id}])">Quiz</button>
+            <button class="btn" onclick="startFlash(${d.id})">Flash</button>
+          </div>
+        </div>
+      </div>
+      <div class="card"><div class="study-content">${d.study}</div></div>
+    </div>`;
+    ds(d.id);streak();xp(5);
+  } else {
+    a.innerHTML=`<div class="fadein">
+      <div class="dgrid">${DOMAINS.map(d=>{
+        const s=ds(d.id);const pct=s.a?Math.round(s.c/s.a*100):0;
+        return`<div class="dcard" onclick="studyD(${d.id})">
+          <div class="dnum">${String(d.id).padStart(2,'0')}</div>
+          <h3>${d.name}</h3><p>${d.desc}</p>
+          <div class="dweight">${d.weight}</div>
+          <div class="pbar"><div class="pfill" style="width:${pct}%"></div></div>
+          <div class="dmeta">${s.a} ans / ${pct}%</div>
+        </div>`;
+      }).join('')}</div>
+    </div>`;
+  }
+}
+function studyD(id){studyDom=id;tab='study';document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));document.querySelector('[data-tab="study"]').classList.add('active');render();}
+
+// ==========================================
+// QUIZ
+// ==========================================
+let qz=null;
+function renderQuiz(a){
+  if(qz&&qz.on){renderQ(a);return;}
+  a.innerHTML=`<div class="fadein"><div class="card">
+    <h2>Configure Quiz</h2>
+    <h3>Domains</h3>
+    <div class="dsel" id="qdsel">${DOMAINS.map(d=>`<div class="dchip on" data-d="${d.id}" onclick="this.classList.toggle('on')">D${d.id}</div>`).join('')}</div>
+    <h3>Questions</h3>
+    <div class="btns">
+      <button class="btn" onclick="lQuiz(10)">10</button>
+      <button class="btn" onclick="lQuiz(25)">25</button>
+      <button class="btn" onclick="lQuiz(50)">50</button>
+      <button class="btn btn-dim" onclick="lQuiz(0)">All</button>
+    </div>
+  </div></div>`;
+}
+function lQuiz(n){const sel=[...document.querySelectorAll('#qdsel .on')].map(e=>+e.dataset.d);if(!sel.length)return alert('Pick domains.');startQuiz(sel,n);}
+function startQuiz(doms,n){
+  let p=QUESTIONS.filter(q=>doms.includes(q.d));
+  for(let i=p.length-1;i>0;i--){const j=0|Math.random()*(i+1);[p[i],p[j]]=[p[j],p[i]];}
+  if(n&&n<p.length)p=p.slice(0,n);
+  qz={on:true,qs:p,i:0,sc:0,ans:false,doms};
+  tab='quiz';document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));document.querySelector('[data-tab="quiz"]').classList.add('active');render();
+}
+function renderQ(a){
+  if(qz.i>=qz.qs.length){renderQR(a);return;}
+  const q=qz.qs[qz.i];
+  a.innerHTML=`<div class="fadein">
+    <button class="back" onclick="qz=null;render()">← EXIT</button>
+    <div class="card">
+      <div class="qheader"><div class="qprog">${qz.i+1}/${qz.qs.length} D${q.d}</div><div style="color:var(--cyan)">${qz.sc}/${qz.i}</div></div>
+      <div class="pbar" style="margin-bottom:14px"><div class="pfill" style="width:${qz.i/qz.qs.length*100}%"></div></div>
+      <div class="qtext">${q.q}</div>
+      <div class="qopts">${q.o.map((o,i)=>`<button class="qopt" onclick="ansQ(${i})">${'ABCD'[i]}. ${o}</button>`).join('')}</div>
+      <div id="qexp" class="hidden"></div>
+      <div id="qnxt" class="hidden btns"><button class="btn" onclick="qz.i++;qz.ans=false;render()">Next →</button></div>
+    </div>
+  </div>`;
+}
+function ansQ(i){
+  if(qz.ans)return;qz.ans=true;
+  const q=qz.qs[qz.i],ok=i===q.a;if(ok)qz.sc++;
+  state.totalAns++;if(ok)state.totalCorr++;const s=ds(q.d);s.a++;if(ok)s.c++;streak();xp(ok?15:5);
+  document.querySelectorAll('.qopt').forEach((b,j)=>{b.classList.add('dis');if(j===q.a)b.classList.add('correct');if(j===i&&!ok)b.classList.add('wrong');});
+  document.getElementById('qexp').classList.remove('hidden');
+  document.getElementById('qexp').innerHTML=`<div class="explanation"><strong>${ok?'Correct.':'Incorrect.'}</strong> ${q.e}</div>`;
+  document.getElementById('qnxt').classList.remove('hidden');
+}
+function renderQR(a){
+  const pct=Math.round(qz.sc/qz.qs.length*100);xp(pct>=70?50:20);
+  a.innerHTML=`<div class="fadein"><div class="card results">
+    <div class="big-score">${pct}%</div>
+    <div class="pass-label ${pct>=70?'pass-yes':'pass-no'}">${pct>=70?'Passing':'Below Threshold'}</div>
+    <p style="color:var(--white2);margin:10px 0;font-family:var(--font-mono)">${qz.sc}/${qz.qs.length}</p>
+    <div class="btns" style="justify-content:center">
+      <button class="btn" onclick="qz=null;render()">Back</button>
+      <button class="btn btn-orange" onclick="startQuiz(qz.doms,qz.qs.length)">Retry</button>
+    </div>
+  </div></div>`;qz.on=false;
+}
+
+// ==========================================
+// FLASHCARDS
+// ==========================================
+let fc=null;
+function renderFlash(a){
+  if(fc&&fc.on){renderFC(a);return;}
+  a.innerHTML=`<div class="fadein"><div class="card">
+    <h2>Flashcards</h2>
+    <div class="btns"><button class="btn" onclick="startFlash(0)">All (${FLASHCARDS.length})</button></div>
+    <div class="btns">${DOMAINS.map(d=>`<button class="btn btn-dim" onclick="startFlash(${d.id})">D${d.id} (${FLASHCARDS.filter(f=>f.d===d.id).length})</button>`).join('')}</div>
+  </div></div>`;
+}
+function startFlash(did){
+  let c=did?FLASHCARDS.filter(f=>f.d===did):[...FLASHCARDS];
+  for(let i=c.length-1;i>0;i--){const j=0|Math.random()*(i+1);[c[i],c[j]]=[c[j],c[i]];}
+  fc={on:true,cards:c,i:0,flip:false,did};
+  tab='flashcards';document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));document.querySelector('[data-tab="flashcards"]').classList.add('active');render();
+}
+function renderFC(a){
+  if(fc.i>=fc.cards.length){
+    xp(25);fc.on=false;
+    a.innerHTML=`<div class="fadein card results"><h2 style="color:var(--cyan)">Deck Complete</h2><p style="color:var(--white2);margin:10px 0;font-family:var(--font-mono)">${fc.cards.length} cards // +25 xp</p><div class="btns" style="justify-content:center"><button class="btn" onclick="fc=null;render()">Back</button><button class="btn btn-dim" onclick="startFlash(${fc.did})">Restart</button></div></div>`;return;
+  }
+  const c=fc.cards[fc.i];
+  a.innerHTML=`<div class="fadein">
+    <button class="back" onclick="fc=null;render()">← EXIT</button>
+    <div class="fc-count">${fc.i+1}/${fc.cards.length} D${c.d}</div>
+    <div class="fc-wrap"><div class="fc ${fc.flip?'flip':''}" onclick="fc.flip=!fc.flip;render()" style="min-height:200px">
+      <div class="fc-face" style="position:relative;width:100%;min-height:200px"><div>${c.front}</div></div>
+      <div class="fc-face fc-back" style="position:absolute;inset:0"><div style="white-space:pre-line">${c.back}</div></div>
+    </div></div>
+    <p style="text-align:center;color:var(--white3);font-family:var(--font-mono);font-size:0.65rem;margin-top:8px">click to flip</p>
+    <div class="fc-btns"><button class="btn" onclick="fc.i++;fc.flip=false;xp(2);render()">Next →</button></div>
+  </div>`;streak();
+}
+
+// ==========================================
+// EXAM
+// ==========================================
+let ex=null,exT=null;
+function renderExam(a){
+  if(ex&&ex.on){if(ex.ph==='q')renderEQ(a);else renderER(a);return;}
+  a.innerHTML=`<div class="fadein"><div class="card">
+    <h2>Practice Exam</h2>
+    <p style="color:var(--white2);font-size:0.88rem;margin:8px 0">All 8 domains. Timed. 70% to pass.</p>
+    <div class="btns">
+      <button class="btn" onclick="startEx(25)">25 Q</button>
+      <button class="btn btn-orange" onclick="startEx(50)">50 Q</button>
+      <button class="btn btn-dim" onclick="startEx(100)">100 Q</button>
+    </div>
+  </div>
+  ${state.exams.length?`<div class="card"><h2>History</h2>${state.exams.map((s,i)=>`<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border);font-family:var(--font-mono);font-size:0.75rem"><span style="color:var(--white3)">Exam ${i+1}</span><span style="color:${s>=70?'var(--green)':'var(--red)'}; font-weight:700">${s}%</span></div>`).join('')}</div>`:''}</div>`;
+}
+function startEx(n){
+  let p=[...QUESTIONS];for(let i=p.length-1;i>0;i--){const j=0|Math.random()*(i+1);[p[i],p[j]]=[p[j],p[i]];}
+  p=p.slice(0,Math.min(n,p.length));
+  ex={on:true,ph:'q',qs:p,i:0,sc:0,ans:false,tl:n<=25?1800:n<=50?3600:7200,st:Date.now()};
+  render();
+  if(exT)clearInterval(exT);
+  exT=setInterval(()=>{if(!ex||!ex.on||ex.ph!=='q'){clearInterval(exT);return;}const e=document.getElementById('ext');if(e){const r=Math.max(0,ex.tl-((Date.now()-ex.st)/1000|0));e.textContent=`${r/60|0}:${String(r%60).padStart(2,'0')}`;if(!r){clearInterval(exT);ex.ph='r';render();}}},1000);
+}
+function renderEQ(a){
+  if(ex.i>=ex.qs.length){ex.ph='r';render();return;}
+  const q=ex.qs[ex.i],r=Math.max(0,ex.tl-((Date.now()-ex.st)/1000|0));
+  a.innerHTML=`<div class="fadein"><div class="card">
+    <div class="qheader"><div class="qprog">${ex.i+1}/${ex.qs.length} D${q.d}</div><div class="timer" id="ext">${r/60|0}:${String(r%60).padStart(2,'0')}</div><div style="color:var(--cyan)">${ex.sc}/${ex.i}</div></div>
+    <div class="pbar" style="margin-bottom:14px"><div class="pfill" style="width:${ex.i/ex.qs.length*100}%"></div></div>
+    <div class="qtext">${q.q}</div>
+    <div class="qopts">${q.o.map((o,i)=>`<button class="qopt" onclick="ansE(${i})">${'ABCD'[i]}. ${o}</button>`).join('')}</div>
+    <div id="eexp" class="hidden"></div>
+    <div id="enxt" class="hidden btns"><button class="btn" onclick="ex.i++;ex.ans=false;render()">Next →</button></div>
+  </div></div>`;
+}
+function ansE(i){
+  if(ex.ans)return;ex.ans=true;
+  const q=ex.qs[ex.i],ok=i===q.a;if(ok)ex.sc++;
+  state.totalAns++;if(ok)state.totalCorr++;const s=ds(q.d);s.a++;if(ok)s.c++;streak();xp(ok?15:5);
+  document.querySelectorAll('.qopt').forEach((b,j)=>{b.classList.add('dis');if(j===q.a)b.classList.add('correct');if(j===i&&!ok)b.classList.add('wrong');});
+  document.getElementById('eexp').classList.remove('hidden');
+  document.getElementById('eexp').innerHTML=`<div class="explanation"><strong>${ok?'✓':'✗'}</strong> ${q.e}</div>`;
+  document.getElementById('enxt').classList.remove('hidden');
+}
+function renderER(a){
+  clearInterval(exT);
+  const pct=Math.round(ex.sc/ex.qs.length*100);
+  state.exams.push(pct);xp(pct>=70?100:40);save();ex.on=false;
+  a.innerHTML=`<div class="fadein"><div class="card results">
+    <div class="big-score">${pct}%</div>
+    <div class="pass-label ${pct>=70?'pass-yes':'pass-no'}">${pct>=70?'Pass':'Fail'}</div>
+    <p style="color:var(--white2);margin:10px 0;font-family:var(--font-mono)">${ex.sc}/${ex.qs.length} // ${(Date.now()-ex.st)/60000|0}min</p>
+    <div class="btns" style="justify-content:center">
+      <button class="btn" onclick="ex=null;render()">Back</button>
+      <button class="btn btn-dim" onclick="tab='dashboard';ex=null;document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));document.querySelector('[data-tab=dashboard]').classList.add('active');render()">Dashboard</button>
+    </div>
+  </div></div>`;
+}
+
+// ==========================================
+// RESOURCES
+// ==========================================
+function renderRes(a){
+  a.innerHTML=`<div class="fadein">
+    <div class="card">
+      <h2>Video Resources</h2>
+      <div class="rlist" style="margin-top:10px">
+        <div class="ritem"><h4>Destination Certification — CISSP MasterClass</h4><p>Best free series. All 8 domains. Clear and exam-focused. Thousands have passed with this alone.</p><span class="rtag">YouTube</span> <span class="rtag">All Domains</span></div>
+        <div class="ritem"><h4>Inside Cloud and Security (Prabh Nair)</h4><p>"Think like a manager" approach. Coffee shots series teaches HOW to answer, not just what.</p><span class="rtag">YouTube</span> <span class="rtag">Mindset</span></div>
+        <div class="ritem"><h4>Pete Zerger — Exam Cram</h4><p>Rapid-fire review. Perfect for the final 2 weeks before exam day.</p><span class="rtag">YouTube</span> <span class="rtag">Review</span></div>
+        <div class="ritem"><h4>IT Dojo — Daily Questions</h4><p>Short daily question videos. Builds the CISSP mindset one question at a time.</p><span class="rtag">YouTube</span> <span class="rtag">Daily</span></div>
+        <div class="ritem"><h4>Kelly Handerhan — Cybrary</h4><p>Classic CISSP training. Clear teaching. Free tier access on Cybrary.</p><span class="rtag">Course</span> <span class="rtag">Free</span></div>
+        <div class="ritem"><h4>Mike Chapple — LinkedIn Learning</h4><p>Pro course. Your public library likely gives free LinkedIn Learning — check before paying.</p><span class="rtag">Course</span> <span class="rtag">Library</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Study Materials</h2>
+      <div class="rlist" style="margin-top:10px">
+        <div class="ritem"><h4>Sunflower Study Guide</h4><p>Community condensed cheat sheet. Print it. Carry it everywhere.</p><span class="rtag">PDF</span></div>
+        <div class="ritem"><h4>r/cissp</h4><p>Real pass/fail stories with strategies. The "How I passed" posts are gold.</p><span class="rtag">Reddit</span></div>
+        <div class="ritem"><h4>(ISC)² Free Resources</h4><p>Occasionally release free practice sets. Worth checking.</p><span class="rtag">Official</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>The Playbook</h2>
+      <div class="study-content">
+        <h4>CISSP Mindset</h4>
+        <ul>
+          <li><strong>Think manager, not technician.</strong> What SHOULD you do, not how to do it technically.</li>
+          <li>When torn, reduce risk without going nuclear.</li>
+          <li>Protect life first. Always.</li>
+          <li>Read ALL answers. Pick the MOST correct.</li>
+        </ul>
+        <div class="exam-tip">Between two answers? ROOT CAUSE over symptom. Strategic over tactical.</div>
+        <h4>12-16 Week Plan</h4>
+        <ul>
+          <li><strong>Weeks 1-8:</strong> One domain/week. Videos + notes + quizzes.</li>
+          <li><strong>Weeks 9-12:</strong> Review. Hammer weak spots. Practice exams.</li>
+          <li><strong>Weeks 13-16:</strong> Exams only. Target 80%+ consistent. Review every miss.</li>
+          <li><strong>Final week:</strong> Light review. Rest. Trust the process.</li>
+        </ul>
+        <h4>Daily</h4>
+        <ul><li>30-60 min study. 25-50 questions. Review all wrong answers. Flashcards during dead time.</li></ul>
+      </div>
+    </div>
+    <div class="footer">Built by <a href="https://cloudnomad.us" target="_blank">cloudnomad.us</a> — free forever</div>
+  </div>`;
+}
+
+// ==========================================
+// INIT
+// ==========================================
+topbar();render();
+</script>
+</body>
+</html>
