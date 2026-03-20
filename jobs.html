@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Job Tracker — Blake Corbit</title>
     <meta name="robots" content="noindex, nofollow">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%230a0a0a'/><text x='50' y='68' font-family='monospace' font-size='60' font-weight='bold' fill='%237a8c5e' text-anchor='middle'>bc</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='8' fill='%23050510'/><rect x='3' y='3' width='94' height='94' rx='6' fill='none' stroke='%2300d4ff' stroke-width='1' opacity='0.4'/><text x='50' y='68' font-family='monospace' font-size='55' font-weight='bold' fill='%2300d4ff' text-anchor='middle'>bc</text></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -18,40 +18,49 @@
             align-items: center;
             justify-content: center;
         }
-        #gate form {
-            text-align: center;
+        #gate form { text-align: center; }
+        #gate .prompt {
+            font-family: var(--font-display);
+            font-size: 0.6rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--white-muted);
+            margin-bottom: 1rem;
         }
         #gate input[type="password"] {
             font-family: var(--font-mono);
-            font-size: 0.875rem;
+            font-size: 0.9rem;
             padding: 0.6rem 1rem;
             border: 1px solid var(--border);
-            background: var(--dark);
+            background: var(--surface);
             color: var(--white);
-            border-radius: 4px;
             width: 240px;
             outline: none;
+            transition: border-color 0.3s;
         }
         #gate input[type="password"]:focus {
-            border-color: var(--accent);
+            border-color: var(--cyan);
         }
         #gate button {
-            font-family: var(--font-mono);
-            font-size: 0.8125rem;
-            padding: 0.6rem 1.25rem;
-            border: 1px solid var(--accent);
-            background: transparent;
-            color: var(--accent);
+            font-family: var(--font-display);
+            font-size: 0.55rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 0.65rem 1.25rem;
+            border: 1px solid rgba(0,212,255,0.25);
+            background: rgba(0,212,255,0.04);
+            color: var(--cyan);
             cursor: pointer;
-            border-radius: 4px;
             margin-left: 0.5rem;
+            transition: all 0.3s;
         }
         #gate button:hover {
-            background: var(--accent);
-            color: var(--black);
+            background: rgba(0,212,255,0.12);
+            border-color: var(--cyan);
         }
         #gate .error {
-            color: #c53030;
+            color: #ff4466;
             font-family: var(--font-mono);
             font-size: 0.75rem;
             margin-top: 0.75rem;
@@ -61,16 +70,26 @@
         #dashboard { display: none; }
 
         .dash-header {
-            background: var(--black);
+            background: var(--surface);
             padding: 3rem 0 2rem;
+            border-bottom: 1px solid var(--border);
+            position: relative;
+        }
+        .dash-header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+            opacity: 0.4;
         }
         .dash-header h1 {
-            color: var(--pure-white);
-            font-size: 1.75rem;
+            color: var(--white);
             margin-bottom: 0.5rem;
+            text-shadow: 0 0 25px var(--cyan-glow);
         }
         .dash-header .meta {
-            color: var(--light-gray);
+            color: var(--white-muted);
         }
 
         .dash-stats {
@@ -79,21 +98,21 @@
             padding: 1.5rem 0;
             flex-wrap: wrap;
         }
-        .stat {
-            text-align: center;
-        }
+        .stat { text-align: center; }
         .stat .num {
-            font-family: var(--font-mono);
-            font-size: 1.75rem;
+            font-family: var(--font-display);
+            font-size: 1.4rem;
             font-weight: 700;
-            color: #2d3748;
+            color: var(--cyan);
+            letter-spacing: 1px;
         }
         .stat .label {
-            font-family: var(--font-mono);
-            font-size: 0.7rem;
-            color: var(--gray);
+            font-family: var(--font-display);
+            font-size: 0.5rem;
+            color: var(--white-muted);
             text-transform: uppercase;
-            letter-spacing: 0.08em;
+            letter-spacing: 2px;
+            margin-top: 2px;
         }
 
         .dash-filters {
@@ -103,22 +122,22 @@
             flex-wrap: wrap;
         }
         .filter-btn {
-            font-family: var(--font-mono);
-            font-size: 0.75rem;
-            padding: 0.35rem 0.75rem;
+            font-family: var(--font-display);
+            font-size: 0.55rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 0.4rem 0.85rem;
             border: 1px solid var(--border);
             background: transparent;
-            color: var(--gray);
+            color: var(--white-muted);
             cursor: pointer;
-            border-radius: 3px;
+            transition: all 0.3s;
         }
-        .filter-btn.active {
-            border-color: var(--accent);
-            color: var(--accent);
-        }
+        .filter-btn.active,
         .filter-btn:hover {
-            border-color: var(--accent);
-            color: var(--accent);
+            border-color: rgba(0,212,255,0.25);
+            color: var(--cyan);
         }
 
         .job-table {
@@ -127,174 +146,178 @@
             margin: 1rem 0;
         }
         .job-table th {
-            font-family: var(--font-mono);
-            font-size: 0.7rem;
+            font-family: var(--font-display);
+            font-size: 0.5rem;
+            font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: var(--gray);
+            letter-spacing: 2px;
+            color: var(--white-muted);
             text-align: left;
-            padding: 0.5rem 0.75rem;
-            border-bottom: 1px solid var(--off-white);
+            padding: 0.6rem 0.75rem;
+            border-bottom: 1px solid var(--border);
         }
         .job-table td {
-            font-size: 0.85rem;
-            padding: 0.6rem 0.75rem;
-            border-bottom: 1px solid #f0f0f0;
-            color: #4a5568;
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            padding: 0.65rem 0.75rem;
+            border-bottom: 1px solid rgba(0,212,255,0.04);
+            color: var(--dark-text);
         }
         .job-table tr:hover td {
-            background: #fafafa;
+            background: rgba(0,212,255,0.02);
         }
         .job-table .score {
             font-family: var(--font-mono);
             font-weight: 600;
-            color: #2d3748;
+            color: var(--white);
         }
         .job-table .title-link {
-            color: #2d3748;
+            color: var(--white);
             font-weight: 500;
             text-decoration: none;
+            transition: color 0.3s;
         }
         .job-table .title-link:hover {
-            color: var(--accent);
+            color: var(--cyan);
         }
         .job-table .source-tag {
-            font-family: var(--font-mono);
-            font-size: 0.65rem;
-            padding: 0.15rem 0.4rem;
-            border-radius: 2px;
-            background: #f0f0f0;
-            color: var(--gray);
+            font-family: var(--font-display);
+            font-size: 0.45rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 0.2rem 0.5rem;
+            border: 1px solid var(--border);
+            color: var(--white-muted);
         }
         .job-table .status-badge {
-            font-family: var(--font-mono);
-            font-size: 0.65rem;
-            padding: 0.15rem 0.4rem;
-            border-radius: 2px;
+            font-family: var(--font-display);
+            font-size: 0.45rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 0.2rem 0.5rem;
         }
-        .status-new { background: #ebf8ff; color: #2b6cb0; }
-        .status-applied { background: #f0fff4; color: #276749; }
-        .status-skipped { background: #f7f7f7; color: #999; }
+        .status-new { border: 1px solid rgba(0,212,255,0.2); color: var(--cyan); }
+        .status-applied { border: 1px solid rgba(34,204,136,0.2); color: #22cc88; }
+        .status-skipped { border: 1px solid var(--border); color: var(--white-muted); }
 
-        /* Follow-up alerts */
+        /* Follow-up banner */
         .followup-banner {
-            background: #fffbeb;
-            border: 1px solid #f6e05e;
-            border-radius: 4px;
+            background: rgba(255,106,0,0.04);
+            border: 1px solid rgba(255,106,0,0.15);
             padding: 1rem 1.25rem;
             margin: 1rem 0;
-            font-family: var(--font-mono);
-            font-size: 0.8rem;
+            font-family: var(--font-body);
+            font-size: 0.9rem;
         }
         .followup-banner .banner-title {
-            font-weight: 600;
-            color: #975a16;
+            font-family: var(--font-display);
+            font-size: 0.6rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--orange);
             margin-bottom: 0.5rem;
         }
         .followup-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0.3rem 0;
-            color: #744210;
+            padding: 0.35rem 0;
+            color: var(--dark-text);
         }
-        .followup-item .days {
-            font-weight: 600;
-            color: #c53030;
-        }
-        .followup-item .days.urgent { color: #c53030; }
-        .followup-item .days.soon { color: #975a16; }
+        .followup-item .days { font-weight: 600; }
+        .followup-item .days.urgent { color: #ff4466; }
+        .followup-item .days.soon { color: var(--orange); }
 
         /* Match rate bar */
         .match-bar {
             display: inline-block;
-            width: 48px;
-            height: 6px;
-            background: #e2e8f0;
-            border-radius: 3px;
+            width: 48px; height: 4px;
+            background: rgba(0,212,255,0.08);
             overflow: hidden;
             vertical-align: middle;
             margin-right: 4px;
         }
-        .match-bar-fill {
-            height: 100%;
-            border-radius: 3px;
-        }
-        .match-high { background: #48bb78; }
-        .match-mid { background: #ecc94b; }
-        .match-low { background: #fc8181; }
+        .match-bar-fill { height: 100%; }
+        .match-high { background: #22cc88; }
+        .match-mid { background: var(--orange); }
+        .match-low { background: #ff4466; }
         .match-text {
             font-family: var(--font-mono);
-            font-size: 0.7rem;
-            color: var(--gray);
+            font-size: 0.75rem;
+            color: var(--white-muted);
         }
 
         /* Expandable row */
         .job-detail-row td {
             padding: 0.75rem 1rem;
-            background: #fafbfc;
-            border-bottom: 1px solid #e2e8f0;
+            background: rgba(0,212,255,0.02);
+            border-bottom: 1px solid var(--border);
         }
         .job-detail-inner {
             display: flex;
             gap: 2rem;
             flex-wrap: wrap;
-            font-size: 0.8rem;
+            font-size: 0.9rem;
         }
         .detail-col { flex: 1; min-width: 200px; }
         .detail-col h4 {
-            font-family: var(--font-mono);
-            font-size: 0.7rem;
+            font-family: var(--font-display);
+            font-size: 0.5rem;
+            font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: var(--gray);
-            margin-bottom: 0.4rem;
+            letter-spacing: 2px;
+            color: var(--white-muted);
+            margin-bottom: 0.5rem;
         }
         .skill-tag {
             display: inline-block;
             font-family: var(--font-mono);
-            font-size: 0.65rem;
-            padding: 0.1rem 0.35rem;
-            border-radius: 2px;
-            margin: 0.1rem;
+            font-size: 0.7rem;
+            padding: 0.15rem 0.45rem;
+            margin: 0.15rem;
         }
-        .skill-have { background: #c6f6d5; color: #276749; }
-        .skill-miss { background: #fed7d7; color: #9b2c2c; }
+        .skill-have { border: 1px solid rgba(34,204,136,0.25); color: #22cc88; }
+        .skill-miss { border: 1px solid rgba(255,68,102,0.25); color: #ff4466; }
 
         /* Apply button */
         .apply-btn {
-            font-family: var(--font-mono);
-            font-size: 0.65rem;
-            padding: 0.2rem 0.5rem;
-            border: 1px solid var(--accent);
-            background: transparent;
-            color: var(--accent);
+            font-family: var(--font-display);
+            font-size: 0.45rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 0.25rem 0.6rem;
+            border: 1px solid rgba(0,212,255,0.25);
+            background: rgba(0,212,255,0.04);
+            color: var(--cyan);
             cursor: pointer;
-            border-radius: 2px;
             text-decoration: none;
+            transition: all 0.3s;
         }
         .apply-btn:hover {
-            background: var(--accent);
-            color: var(--black);
+            background: rgba(0,212,255,0.12);
+            border-color: var(--cyan);
         }
 
         .job-table tr.expandable { cursor: pointer; }
-        .job-table tr.expandable:hover td { background: #f7fafc; }
 
         .no-jobs {
             font-family: var(--font-mono);
-            font-size: 0.875rem;
-            color: var(--gray);
+            font-size: 0.9rem;
+            color: var(--white-muted);
             padding: 3rem 0;
             text-align: center;
         }
 
         .dash-content {
             padding: 1rem 0 4rem;
+            position: relative;
+            z-index: 1;
         }
 
         @media (max-width: 768px) {
-            .job-table { font-size: 0.8rem; }
+            .job-table { font-size: 0.85rem; }
             .job-table th:nth-child(4),
             .job-table td:nth-child(4),
             .job-table th:nth-child(5),
@@ -317,10 +340,9 @@
         </div>
     </nav>
 
-    <!-- Password Gate -->
     <div id="gate">
         <form onsubmit="return unlock()">
-            <div style="font-family: var(--font-mono); font-size: 0.8125rem; color: var(--gray); margin-bottom: 1rem;">enter password</div>
+            <div class="prompt">enter password</div>
             <div>
                 <input type="password" id="pw" autocomplete="off" autofocus>
                 <button type="submit">go</button>
@@ -329,7 +351,6 @@
         </form>
     </div>
 
-    <!-- Dashboard (hidden until authenticated) -->
     <div id="dashboard">
         <section class="dash-header">
             <div class="page-width--wide">
@@ -341,9 +362,7 @@
         <section class="dash-content">
             <div class="page-width--wide">
                 <div class="dash-stats" id="stats"></div>
-
                 <div id="followup-banner" class="followup-banner" style="display:none"></div>
-
                 <div class="dash-filters">
                     <button class="filter-btn active" data-filter="new" onclick="setFilter('new')">new</button>
                     <button class="filter-btn" data-filter="applied" onclick="setFilter('applied')">applied</button>
@@ -351,7 +370,6 @@
                     <button class="filter-btn" data-filter="skipped" onclick="setFilter('skipped')">skipped</button>
                     <button class="filter-btn" data-filter="all" onclick="setFilter('all')">all</button>
                 </div>
-
                 <table class="job-table">
                     <thead>
                         <tr>
@@ -367,7 +385,6 @@
                     </thead>
                     <tbody id="job-list"></tbody>
                 </table>
-
                 <div id="no-jobs" class="no-jobs" style="display:none">
                     no jobs found. run <code>node hunt.js search</code> locally to find more.
                 </div>
@@ -387,17 +404,13 @@
     </footer>
 
     <script>
-    // Simple password hash check (SHA-256)
-    // Not truly secure — just keeps casual visitors out
     const HASH = '32b92e917c14e39292c72bbc4251e4937b4c249a9e18aaea6d48c9fda02706ca';
     let jobs = [];
     let currentFilter = 'new';
 
     async function sha256(str) {
-        const buf = await crypto.subtle.digest('SHA-256',
-            new TextEncoder().encode(str));
-        return Array.from(new Uint8Array(buf))
-            .map(b => b.toString(16).padStart(2, '0')).join('');
+        const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+        return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
     }
 
     async function unlock() {
@@ -414,9 +427,7 @@
 
     async function checkAuth() {
         const stored = localStorage.getItem('jt_auth');
-        if (stored === HASH) {
-            showDashboard();
-        }
+        if (stored === HASH) showDashboard();
     }
 
     async function showDashboard() {
@@ -461,13 +472,12 @@
             <div class="stat"><div class="num">${stats.new}</div><div class="label">new</div></div>
             <div class="stat"><div class="num">${stats.applied}</div><div class="label">applied</div></div>
             <div class="stat"><div class="num">${stats.skipped}</div><div class="label">skipped</div></div>
-            ${needFollowup > 0 ? `<div class="stat"><div class="num" style="color:#c53030">${needFollowup}</div><div class="label">follow up</div></div>` : ''}
+            ${needFollowup > 0 ? `<div class="stat"><div class="num" style="color:#ff4466">${needFollowup}</div><div class="label">follow up</div></div>` : ''}
             ${Object.entries(sources).map(([s, c]) =>
                 `<div class="stat"><div class="num">${c}</div><div class="label">${s}</div></div>`
             ).join('')}
         `;
 
-        // Follow-up banner
         const banner = document.getElementById('followup-banner');
         const followups = jobs
             .filter(j => j.status === 'applied' && j.appliedDate && daysSince(j.appliedDate) >= 5)
@@ -508,7 +518,7 @@
 
     function renderGapDetail(gaps) {
         if (!gaps || !gaps.jobWants || gaps.jobWants.length === 0) {
-            return '<em style="color:var(--gray);font-size:0.75rem">no skill data available</em>';
+            return '<em style="color:var(--white-muted);font-size:0.8rem">no skill data available</em>';
         }
         const matched = (gaps.matched || []).map(s => `<span class="skill-tag skill-have">${esc(s)}</span>`).join('');
         const missing = (gaps.missing || []).map(s => `<span class="skill-tag skill-miss">${esc(s)}</span>`).join('');
@@ -520,9 +530,7 @@
 
     function toggleDetail(id) {
         const row = document.getElementById('detail-' + id);
-        if (row) {
-            row.style.display = row.style.display === 'none' ? 'table-row' : 'none';
-        }
+        if (row) row.style.display = row.style.display === 'none' ? 'table-row' : 'none';
     }
 
     function renderJobs() {
@@ -575,5 +583,6 @@
 
     checkAuth();
     </script>
+    <script src="lightcycle.js"></script>
 </body>
 </html>
