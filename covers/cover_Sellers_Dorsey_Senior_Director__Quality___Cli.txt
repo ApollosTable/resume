@@ -1,0 +1,26 @@
+Blake Corbit
+Milford, NH · (603) 732-3032 · Blake.A.Corbit@gmail.com
+
+March 26, 2026
+
+Re: Senior Director, Quality & Client Success (Healthcare Consulting) at Sellers Dorsey
+
+To the hiring team at Sellers Dorsey,
+
+I manage the technical support team at AutoVitals, a B2B SaaS platform serving 200+ automotive repair shops. My team handles 163+ tickets a week across distributed systems, API integrations, and SQL Server environments — and I've earned three promotions in 3.5 years by finding ways to make us dramatically more effective without adding headcount.
+
+When our team got cut from 7 to 3, I didn't just redistribute the work — I built the automation that made it possible. An AI-powered ticket pipeline that handles triage, routing, and response drafting. A diagnostic toolkit that drove first-contact resolution from 62% to 78%. The result: same volume, smaller team, faster response times.
+
+What I'd bring to Sellers Dorsey:
+
+• Built 12-service internal automation platform (Node.js)
+• AI-powered ticket pipeline (Python + OpenAI API) — enabled 3-person team to do work of 7
+• 3 promotions in 3.5 years at AutoVitals
+• Manages 163+ tickets/week for 200+ B2B SaaS clients
+
+I also bring hands-on technical depth in saas, leadership, management, hiring, escalation — not as a developer, but as someone who understands the product deeply enough to build the tools his team needs and speak the same language as engineering.
+
+I'd welcome the chance to talk about how that translates to Sellers Dorsey. I'm available anytime.
+
+Blake Corbit
+cloudnomad.us · github.com/ApollosTable · linkedin.com/in/blake-corbit
