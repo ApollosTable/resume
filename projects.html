@@ -51,6 +51,30 @@
             <hr>
 
             <div class="project-entry">
+                <h3>Bonus Velocity Scorecard Engine</h3>
+                <div class="stack">node.js / vercel serverless / upstash kv / zendesk api / vitest</div>
+                <p>Support performance bonuses used to be calculated by hand every quarter — slow, and easy to argue with. I built a scoring engine that pulls ticket velocity and CSAT straight from Zendesk and computes payout tiers live, automatically excluding incident and problem tickets so nobody gets dinged for an outage they didn't cause. It's backed by 37 unit tests and a golden fixture that reproduces the real quarterly scorecard exactly. When the math is transparent and tested, the arguments stop.</p>
+            </div>
+
+            <hr>
+
+            <div class="project-entry">
+                <h3>Documentation Gap Engine</h3>
+                <div class="stack">node.js / supabase / vercel cron / zendesk api / confluence api</div>
+                <p>You can't write every doc, so write the ones people actually need. This runs on a daily cron: it pulls 90 days of ticket volume by category from Zendesk, measures what's actually covered across 288 help-center articles and 180+ internal Confluence pages, and flags the high-demand topics with thin coverage in a Gap Inbox. Built test-first. It turns "we should document more" into a ranked list of exactly what to write next.</p>
+            </div>
+
+            <hr>
+
+            <div class="project-entry">
+                <h3>SLA Exemption Engine</h3>
+                <div class="stack">zendesk sla policies / zendesk search api / bash</div>
+                <p>Our first-reply-time breach rate looked terrible — 82% — and it was lying to us. Agent-created web work-requests were being measured against a customer-facing SLA they never belonged to. I diagnosed it, then built a tag-driven exemption policy that pulls those tickets out of the metric cleanly, with rollback and a full audit trail. Resolution-time compliance came back to ~94%, and the numbers finally meant something. Good metrics measure the right thing — not just something.</p>
+            </div>
+
+            <hr>
+
+            <div class="project-entry">
                 <h3>PowerShell Diagnostic Toolkit</h3>
                 <div class="stack">powershell / windows server / sql server</div>
                 <p>I got tired of running the same fifteen commands in the same order every time someone reported a sync issue. So I built a diagnostic toolkit: SQL Server connectivity checks, network path tracing, DNS verification, registry validation, and log aggregation across 200+ client installations. The team went from 62% first-contact resolution to 78%. Not because they got smarter — because the tooling got smarter.</p>
@@ -67,9 +91,41 @@
             <hr>
 
             <div class="project-entry">
+                <h3>Shop Onboarding Bot</h3>
+                <div class="stack">python / fastapi / slack api / jira api / docker</div>
+                <p>Every new shop that signed on kicked off the same onboarding checklist, typed into Jira by hand. I built a Slack bot that watches the new-shop channel, reads the alert, and spins up a fully formatted onboarding ticket under the right epic — one slash command, done. Templated for the edge cases. Boring work that used to eat time, now it doesn't.</p>
+            </div>
+
+            <hr>
+
+            <div class="project-entry">
+                <h3>Zendesk MCP Server</h3>
+                <div class="stack">node.js / model context protocol / zendesk api</div>
+                <p>A small, read-only MCP server that gives AI tools safe access to Zendesk — search, counts, tickets, comments, fields, groups. GET-only, no way to change anything. It's the quiet backbone under half the other tools on this page: whenever I want an AI assistant to reason over real support data, this is what it talks to. Modern plumbing, done cleanly.</p>
+            </div>
+
+            <hr>
+
+            <div class="project-entry">
+                <h3>Support Org Blueprint</h3>
+                <div class="stack">org design / google apps script / forms + sheets / static site</div>
+                <p>When we stood up a real support organization, I designed the thing: a four-tier structure, the hiring pipeline, an interview scoring system that builds itself in Google Forms and feeds a scoring sheet, and a twelve-module Tier 1 bootcamp. All of it grounded in analysis of thousands of real tickets — so the org was shaped around the work that actually comes in, not a guess. This is the part of the job that isn't code: figuring out how a team should be built, then building the scaffolding to grow it.</p>
+            </div>
+
+            <hr>
+
+            <div class="project-entry">
                 <h3>Technical Knowledge Base</h3>
                 <div class="stack">documentation / process engineering</div>
                 <p>50+ technical articles. Not marketing content — troubleshooting decision trees and step-by-step procedures for SQL Server, API integrations, network connectivity, and distributed systems. Written so the next person who hits the problem doesn't start from zero. Also built the onboarding documentation that cut new engineer ramp-up time by 60%. Knowledge that compounds is the highest-leverage thing you can build.</p>
+            </div>
+
+            <hr>
+
+            <div class="project-entry">
+                <h3>CISSP Grind</h3>
+                <div class="stack">vanilla js / single-file web app / localstorage</div>
+                <p>A gamified CISSP study trainer covering all eight security domains — quizzes, flashcards, timed practice exams, XP and streaks to keep you coming back. The whole thing is one self-contained HTML file: no framework, no build, no backend, works offline. Studying for a hard cert is just a lot of small reps in a row, so I made the reps fun.</p>
             </div>
 
         </div>
